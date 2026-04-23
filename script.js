@@ -28,7 +28,7 @@ function openNav() {
   burger.setAttribute('aria-expanded', 'true');
 }
 
-function closeNav() {
+function closeNav({ returnFocus = false } = {}) {
   if (navClosing) return;
   navClosing = true;
   navLinks.classList.remove('open');
@@ -39,13 +39,22 @@ function closeNav() {
     navLinks.classList.remove('is-closing');
     navClosing = false;
   }, 220);
+  if (returnFocus) burger.focus();
 }
 
 burger.addEventListener('click', () => {
   navLinks.classList.contains('open') ? closeNav() : openNav();
 });
 navLinks.querySelectorAll('a').forEach(a => {
-  a.addEventListener('click', closeNav);
+  a.addEventListener('click', () => closeNav());
+});
+
+// Escape closes the mobile nav menu and returns focus to the burger
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && navLinks.classList.contains('open')) {
+    e.preventDefault();
+    closeNav({ returnFocus: true });
+  }
 });
 
 // Align timeline dots with job title in each card
@@ -122,10 +131,12 @@ document.querySelectorAll('.writing-tag, .talk-type').forEach(el => {
 });
 
 // ── Smooth scroll helper (accounts for sticky nav) ───────────
+const reducedMotionQuery = matchMedia('(prefers-reduced-motion: reduce)');
 function scrollToEl(el) {
   const navH = document.getElementById('nav').offsetHeight;
   const top = el.getBoundingClientRect().top + window.scrollY - navH - 16;
-  window.scrollTo({ top, behavior: 'smooth' });
+  // Respect the user's motion preference (SC 2.3.3).
+  window.scrollTo({ top, behavior: reducedMotionQuery.matches ? 'auto' : 'smooth' });
 }
 
 // Snapshot all cards before pagination hides any
@@ -149,28 +160,49 @@ document.querySelectorAll('.writing-group').forEach(group => {
   const bar = document.createElement('div');
   bar.className = 'pagination';
 
+  // Derive a human-readable label for this group for live announcements.
+  const groupLabel = (group.querySelector('.writing-group-label')?.textContent || 'Writing').trim();
+
   const prevBtn = document.createElement('button');
   prevBtn.className = 'page-btn';
-  prevBtn.setAttribute('aria-label', 'Previous page');
-  prevBtn.innerHTML = '← Prev';
+  prevBtn.setAttribute('aria-label', `Previous page of ${groupLabel}`);
+  prevBtn.innerHTML = '<span aria-hidden="true">←</span> Prev';
 
   const info = document.createElement('span');
   info.className = 'page-info';
+  info.setAttribute('aria-hidden', 'true');
 
   const nextBtn = document.createElement('button');
   nextBtn.className = 'page-btn';
-  nextBtn.setAttribute('aria-label', 'Next page');
-  nextBtn.innerHTML = 'Next →';
+  nextBtn.setAttribute('aria-label', `Next page of ${groupLabel}`);
+  nextBtn.innerHTML = 'Next <span aria-hidden="true">→</span>';
 
   bar.append(prevBtn, info, nextBtn);
   group.appendChild(bar);
 
-  function render() {
+  // Polite live region for SR announcements of page changes.
+  const live = document.createElement('div');
+  live.className = 'sr-only';
+  live.setAttribute('aria-live', 'polite');
+  live.setAttribute('aria-atomic', 'true');
+  group.appendChild(live);
+  let liveTimer = null;
+  function announce(shownCount) {
+    clearTimeout(liveTimer);
+    live.textContent = '';
+    liveTimer = setTimeout(() => {
+      live.textContent = `${groupLabel}: page ${page + 1} of ${totalPages}, showing ${shownCount} post${shownCount === 1 ? '' : 's'}.`;
+    }, 60);
+  }
+
+  function render(opts = {}) {
     const start = page * PER_PAGE;
+    let shownCount = 0;
     cards.forEach((card, i) => {
       const show = i >= start && i < start + PER_PAGE;
       card.style.display = show ? '' : 'none';
       if (show) {
+        shownCount++;
         card.style.animation = 'none';
         card.offsetHeight;
         card.style.animation = `fadeInUp 0.3s ${(i - start) * 40}ms ease both`;
@@ -179,13 +211,14 @@ document.querySelectorAll('.writing-group').forEach(group => {
     info.textContent = `${page + 1} / ${totalPages}`;
     prevBtn.disabled = page === 0;
     nextBtn.disabled = page === totalPages - 1;
+    if (opts.announce) announce(shownCount);
   }
 
   prevBtn.addEventListener('click', () => {
-    if (page > 0) { page--; render(); scrollToEl(group); }
+    if (page > 0) { page--; render({ announce: true }); scrollToEl(group); }
   });
   nextBtn.addEventListener('click', () => {
-    if (page < totalPages - 1) { page++; render(); scrollToEl(group); }
+    if (page < totalPages - 1) { page++; render({ announce: true }); scrollToEl(group); }
   });
 
   render();
@@ -204,20 +237,39 @@ const talksPagination = document.createElement('div');
 talksPagination.className = 'pagination';
 const talksPrev = document.createElement('button');
 talksPrev.className = 'page-btn';
-talksPrev.innerHTML = '← Prev';
+talksPrev.setAttribute('aria-label', 'Previous page of talks');
+talksPrev.innerHTML = '<span aria-hidden="true">←</span> Prev';
 const talksInfo = document.createElement('span');
 talksInfo.className = 'page-info';
+talksInfo.setAttribute('aria-hidden', 'true');
 const talksNext = document.createElement('button');
 talksNext.className = 'page-btn';
-talksNext.innerHTML = 'Next →';
+talksNext.setAttribute('aria-label', 'Next page of talks');
+talksNext.innerHTML = 'Next <span aria-hidden="true">→</span>';
 talksPagination.append(talksPrev, talksInfo, talksNext);
 talksGrid.after(talksPagination);
 
-function renderTalks() {
+// Polite live region for announcing page changes to screen readers.
+const talksLive = document.createElement('div');
+talksLive.className = 'sr-only';
+talksLive.setAttribute('aria-live', 'polite');
+talksLive.setAttribute('aria-atomic', 'true');
+talksPagination.after(talksLive);
+let talksLiveTimer = null;
+function announceTalksPage(page, totalPages, count) {
+  if (!talksLive) return;
+  clearTimeout(talksLiveTimer);
+  talksLive.textContent = '';
+  talksLiveTimer = setTimeout(() => {
+    talksLive.textContent = `Page ${page} of ${totalPages}, showing ${count} talk${count === 1 ? '' : 's'}.`;
+  }, 60);
+}
+
+function renderTalks(opts = {}) {
   const allCards = Array.from(talksGrid.querySelectorAll('.talk-card'));
   const matching = allCards.filter(c => talksYear === 'all' || c.dataset.year === talksYear);
   const total = matching.length;
-  const totalPages = Math.ceil(total / TALKS_PER_PAGE);
+  const totalPages = Math.max(1, Math.ceil(total / TALKS_PER_PAGE));
 
   // clamp page
   talksPage = Math.min(talksPage, Math.max(0, totalPages - 1));
@@ -225,10 +277,12 @@ function renderTalks() {
   const start = talksPage * TALKS_PER_PAGE;
 
   allCards.forEach(c => c.style.display = 'none');
+  let shownCount = 0;
   matching.forEach((c, i) => {
     const show = i >= start && i < start + TALKS_PER_PAGE;
     c.style.display = show ? '' : 'none';
     if (show) {
+      shownCount++;
       c.style.animation = 'none';
       c.offsetHeight;
       c.style.animation = `fadeInUp 0.3s ${(i - start) * 35}ms ease both`;
@@ -244,18 +298,22 @@ function renderTalks() {
     talksPrev.disabled = talksPage === 0;
     talksNext.disabled = talksPage === totalPages - 1;
   }
+
+  if (opts.announce) {
+    announceTalksPage(talksPage + 1, totalPages, shownCount);
+  }
 }
 
 talksPrev.addEventListener('click', () => {
   if (talksPage > 0) {
     talksPage--;
-    renderTalks();
+    renderTalks({ announce: true });
     scrollToEl(yearFilter);
   }
 });
 talksNext.addEventListener('click', () => {
   talksPage++;
-  renderTalks();
+  renderTalks({ announce: true });
   scrollToEl(yearFilter);
 });
 
@@ -264,22 +322,28 @@ if (yearFilter && talksGrid) {
   yearFilter.addEventListener('click', (e) => {
     const btn = e.target.closest('.year-btn');
     if (!btn) return;
-    yearFilter.querySelectorAll('.year-btn').forEach(b => b.classList.remove('active'));
+    yearFilter.querySelectorAll('.year-btn').forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-pressed', 'false');
+    });
     btn.classList.add('active');
+    btn.setAttribute('aria-pressed', 'true');
     talksYear = btn.dataset.year;
     talksPage = 0;
-    renderTalks();
+    renderTalks({ announce: true });
   });
 }
 
 // ── Active nav highlight on scroll ───────────────────────────
+// Toggle the .is-active class so the CSS underline affordance applies
+// (not color alone — SC 1.4.1 Use of Color).
 const sections = document.querySelectorAll('section[id]');
 const navAs = document.querySelectorAll('.nav-links a:not(.nav-cta)');
 const sectionObserver = new IntersectionObserver(
   (entries) => entries.forEach(e => {
     if (e.isIntersecting) {
       navAs.forEach(a => {
-        a.style.color = a.getAttribute('href') === `#${e.target.id}` ? 'var(--text)' : '';
+        a.classList.toggle('is-active', a.getAttribute('href') === `#${e.target.id}`);
       });
     }
   }),
@@ -298,10 +362,40 @@ const searchResultsWriting = document.getElementById('searchResultsWriting');
 const searchResultsTalks = document.getElementById('searchResultsTalks');
 const searchNoResults = document.getElementById('searchNoResults');
 const searchEmpty = document.getElementById('searchEmpty');
+const searchStatus = document.getElementById('searchStatus');
+
+let searchPreviousFocus = null;
+let searchStatusTimer = null;
+
+function announceSearchStatus(msg) {
+  if (!searchStatus) return;
+  clearTimeout(searchStatusTimer);
+  // Clear then set to force SR re-announcement of the same value
+  searchStatus.textContent = '';
+  searchStatusTimer = setTimeout(() => { searchStatus.textContent = msg; }, 50);
+}
+
+// Set `inert` + aria-hidden on background landmarks while a modal dialog
+// is open so assistive tech and keyboard users can't reach content
+// behind the dialog (SC 2.4.3, modal dialog best practice).
+function setBackgroundInert(inert) {
+  const bg = document.querySelectorAll('#nav, #main, footer, #linkedinFab');
+  bg.forEach(el => {
+    if (inert) {
+      el.setAttribute('inert', '');
+      el.setAttribute('aria-hidden', 'true');
+    } else {
+      el.removeAttribute('inert');
+      el.removeAttribute('aria-hidden');
+    }
+  });
+}
 
 function openSearch() {
+  searchPreviousFocus = document.activeElement;
   searchOverlay.classList.add('open');
   searchOverlay.removeAttribute('aria-hidden');
+  setBackgroundInert(true);
   document.body.style.overflow = 'hidden';
   searchInput.focus();
 }
@@ -309,6 +403,7 @@ function openSearch() {
 function closeSearch() {
   searchOverlay.classList.remove('open');
   searchOverlay.setAttribute('aria-hidden', 'true');
+  setBackgroundInert(false);
   document.body.style.overflow = '';
   searchInput.blur();
   searchInput.value = '';
@@ -316,7 +411,53 @@ function closeSearch() {
   searchResultsTalks.innerHTML = '';
   searchNoResults.hidden = true;
   searchEmpty.hidden = false;
+  if (searchStatus) searchStatus.textContent = '';
+  // Return focus to the element that opened the search (usually searchToggle)
+  const target = searchPreviousFocus && typeof searchPreviousFocus.focus === 'function'
+    ? searchPreviousFocus
+    : searchToggle;
+  try { target.focus(); } catch (_) { searchToggle.focus(); }
+  searchPreviousFocus = null;
 }
+
+// Focus trap inside the search overlay: cycle through ALL focusable
+// elements in the dialog (input, close button, result links/buttons).
+const FOCUSABLE_SELECTOR = [
+  'a[href]',
+  'button:not([disabled])',
+  'input:not([disabled]):not([type="hidden"])',
+  'textarea:not([disabled])',
+  'select:not([disabled])',
+  '[tabindex]:not([tabindex="-1"])'
+].join(',');
+
+function getFocusable(container) {
+  return Array.from(container.querySelectorAll(FOCUSABLE_SELECTOR))
+    .filter(el => !el.hasAttribute('disabled')
+      && el.getAttribute('aria-hidden') !== 'true'
+      && (el.offsetWidth || el.offsetHeight || el.getClientRects().length));
+}
+
+searchOverlay.addEventListener('keydown', (e) => {
+  if (e.key !== 'Tab') return;
+  if (!searchOverlay.classList.contains('open')) return;
+  const focusables = getFocusable(searchOverlay);
+  if (!focusables.length) return;
+  const first = focusables[0];
+  const last = focusables[focusables.length - 1];
+  const active = document.activeElement;
+  if (e.shiftKey) {
+    if (active === first || !searchOverlay.contains(active)) {
+      e.preventDefault();
+      last.focus();
+    }
+  } else {
+    if (active === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
+});
 
 searchToggle.addEventListener('click', openSearch);
 searchCloseBtn.addEventListener('click', closeSearch);
@@ -364,6 +505,7 @@ searchInput.addEventListener('input', () => {
     searchResultsTalks.innerHTML = '';
     searchNoResults.hidden = true;
     searchEmpty.hidden = false;
+    if (searchStatus) searchStatus.textContent = '';
     return;
   }
 
@@ -374,4 +516,29 @@ searchInput.addEventListener('input', () => {
   renderGroup(searchResultsWriting, matchWriting, 'Writing');
   renderGroup(searchResultsTalks, matchTalks, 'Talks');
   searchNoResults.hidden = matchWriting.length + matchTalks.length > 0;
+
+  const w = matchWriting.length;
+  const t = matchTalks.length;
+  let msg;
+  if (w === 0 && t === 0) {
+    msg = 'No results found.';
+  } else {
+    msg = `${w} writing result${w === 1 ? '' : 's'}, ${t} talk result${t === 1 ? '' : 's'}.`;
+  }
+  announceSearchStatus(msg);
+});
+
+// ── External links: announce "opens in new tab" to assistive tech ──
+// Strip trailing decorative glyphs (arrows, chevrons, ellipses, pipes) so
+// the accessible name ends on a word, not punctuation a screen reader
+// either mis-pronounces or narrates as "right arrow".
+const DECORATIVE_TRAILING = /[\s\u00A0\u2000-\u200D\u2022\u2013\u2014\u2026\u2190-\u21FF\u25A0-\u25FF\u2700-\u27BF\u3001-\u3003|·•›»→←⇢⇠]+$/u;
+document.querySelectorAll('a[target="_blank"]').forEach(a => {
+  // Only augment if the link doesn't already carry a descriptive aria-label
+  if (a.hasAttribute('aria-label')) return;
+  let text = (a.textContent || '').replace(/\s+/g, ' ').trim();
+  // Strip decorative trailing glyphs, then re-trim any whitespace left behind.
+  text = text.replace(DECORATIVE_TRAILING, '').trim();
+  if (!text) return;
+  a.setAttribute('aria-label', `${text} (opens in new tab)`);
 });
