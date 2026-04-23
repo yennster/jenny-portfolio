@@ -8,7 +8,7 @@
   --surface:   oklch(99.5% 0.004 193);
   --border:    oklch(88% 0.013 193);
   --text:      oklch(20% 0.010 200);
-  --text-muted:oklch(44% 0.009 200);
+  --text-muted:oklch(38% 0.010 200);
   --teal:      oklch(48% 0.13 192);
   --teal-lt:   oklch(94.5% 0.022 192);
   --teal-mid:  oklch(72% 0.08 192);
@@ -216,11 +216,15 @@ section { padding: 7rem 0; }
 .nav-burger {
   display: none;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 5px;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 4px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 10px;
 }
 .nav-burger span {
   display: block;
@@ -237,7 +241,9 @@ section { padding: 7rem 0; }
   border: none;
   cursor: pointer;
   color: var(--text-muted);
-  padding: 4px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -245,25 +251,6 @@ section { padding: 7rem 0; }
   margin-right: 0.25rem;
 }
 .nav-search:hover { color: var(--teal); }
-.nav-search[data-tooltip] { position: relative; }
-.nav-search[data-tooltip]::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--text);
-  color: var(--bg);
-  font-size: 0.72rem;
-  white-space: nowrap;
-  padding: 0.3rem 0.6rem;
-  border-radius: 6px;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.15s;
-}
-.nav-search[data-tooltip]:hover::after,
-.nav-search[data-tooltip]:focus-visible::after { opacity: 1; }
 
 #searchOverlay {
   display: none;
@@ -314,9 +301,9 @@ section { padding: 7rem 0; }
   border: none;
   cursor: pointer;
   color: var(--text-muted);
-  /* Ensure 24×24 CSS-px minimum target (SC 2.5.8, WCAG 2.2 AA). */
-  min-width: 2.5rem;
-  min-height: 2.5rem;
+  /* 44×44 CSS-px minimum target (WCAG 2.1 AA, SC 2.5.5). */
+  min-width: 2.75rem;
+  min-height: 2.75rem;
   padding: 0.5rem;
   display: flex;
   align-items: center;
@@ -783,8 +770,8 @@ section { padding: 7rem 0; }
 .writing-card--featured .writing-tag { color: var(--teal); }
 .writing-card--featured .writing-cta { color: var(--teal); }
 
-.writing-card h3 { flex: 1; font-size: 0.875rem; line-height: 1.4; color: var(--text); font-weight: 500; }
-.writing-card--featured h3 { font-size: 0.9rem; line-height: 1.45; font-weight: 600; }
+.writing-card h4 { flex: 1; font-size: 0.875rem; line-height: 1.4; color: var(--text); font-weight: 500; }
+.writing-card--featured h4 { font-size: 0.9rem; line-height: 1.45; font-weight: 600; }
 
 .writing-cta {
   font-size: 0.75rem;
@@ -808,9 +795,10 @@ section { padding: 7rem 0; }
 }
 
 .year-btn {
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   font-weight: 700;
-  padding: 0.3rem 0.85rem;
+  min-height: 44px;
+  padding: 0.5rem 1rem;
   border-radius: 100px;
   border: 1.5px solid var(--border);
   background: var(--surface);
@@ -965,9 +953,10 @@ footer p { font-size: 0.8rem; color: var(--text-muted); }
 
 .page-btn {
   font-family: var(--font-sans);
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  padding: 0.5rem 1.1rem;
+  min-height: 44px;
+  padding: 0.75rem 1.25rem;
   border-radius: 100px;
   border: 1.5px solid var(--border);
   background: var(--surface);

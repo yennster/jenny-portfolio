@@ -166,7 +166,7 @@ document.querySelectorAll('.writing-group').forEach(group => {
   const prevBtn = document.createElement('button');
   prevBtn.className = 'page-btn';
   prevBtn.setAttribute('aria-label', `Previous page of ${groupLabel}`);
-  prevBtn.innerHTML = '<span aria-hidden="true">←</span> Prev';
+  prevBtn.innerHTML = '<span aria-hidden="true">←</span> Previous';
 
   const info = document.createElement('span');
   info.className = 'page-info';
@@ -238,7 +238,7 @@ talksPagination.className = 'pagination';
 const talksPrev = document.createElement('button');
 talksPrev.className = 'page-btn';
 talksPrev.setAttribute('aria-label', 'Previous page of talks');
-talksPrev.innerHTML = '<span aria-hidden="true">←</span> Prev';
+talksPrev.innerHTML = '<span aria-hidden="true">←</span> Previous';
 const talksInfo = document.createElement('span');
 talksInfo.className = 'page-info';
 talksInfo.setAttribute('aria-hidden', 'true');
