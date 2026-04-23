@@ -19,12 +19,33 @@ window.addEventListener('scroll', () => {
 // Mobile menu
 const burger = document.querySelector('.nav-burger');
 const navLinks = document.querySelector('.nav-links');
+let navClosing = false;
+
+function openNav() {
+  navLinks.classList.remove('is-closing');
+  navLinks.classList.add('open');
+  burger.classList.add('open');
+  burger.setAttribute('aria-expanded', 'true');
+}
+
+function closeNav() {
+  if (navClosing) return;
+  navClosing = true;
+  navLinks.classList.remove('open');
+  navLinks.classList.add('is-closing');
+  burger.classList.remove('open');
+  burger.setAttribute('aria-expanded', 'false');
+  setTimeout(() => {
+    navLinks.classList.remove('is-closing');
+    navClosing = false;
+  }, 220);
+}
+
 burger.addEventListener('click', () => {
-  navLinks.classList.toggle('open');
-  burger.setAttribute('aria-expanded', navLinks.classList.contains('open'));
+  navLinks.classList.contains('open') ? closeNav() : openNav();
 });
 navLinks.querySelectorAll('a').forEach(a => {
-  a.addEventListener('click', () => navLinks.classList.remove('open'));
+  a.addEventListener('click', closeNav);
 });
 
 // Align timeline dots with job title in each card
