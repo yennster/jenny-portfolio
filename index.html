@@ -46,7 +46,7 @@
         <li><a href="#contact" class="nav-cta">Contact</a></li>
       </ul>
       <div class="nav-actions">
-        <button class="nav-search" id="searchToggle" aria-label="Search" data-tooltip="Search (/ or ⌘K)">
+        <button class="nav-search" id="searchToggle" aria-label="Search (slash or Command K)">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         </button>
         <button class="nav-burger" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
@@ -61,9 +61,9 @@
     <h2 id="searchTitle" class="sr-only">Search site</h2>
     <div class="search-header">
       <div class="container">
-        <form class="search-input-wrap" role="search" aria-label="Site search" onsubmit="return false;">
+        <form class="search-input-wrap" id="searchForm" role="search" aria-label="Site search">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="search" id="searchInput" placeholder="Search talks, writing…" autocomplete="off" aria-label="Search talks and writing" />
+          <input type="search" id="searchInput" placeholder="Search talks, writing…" aria-label="Search talks and writing" />
           <button type="button" id="searchClose" aria-label="Close search">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
@@ -88,11 +88,11 @@
   <main id="main">
 
   <!-- HERO -->
-  <section id="hero">
+  <section id="hero" aria-labelledby="heroName">
     <div class="hero-inner">
       <div class="hero-text">
         <p class="hero-eyebrow">Staff Engineer · Developer Relations</p>
-        <h1>Jenny<br><span class="accent">Speelman</span></h1>
+        <h1 id="heroName">Jenny<br><span class="accent">Speelman</span></h1>
         <p class="hero-nee">(<span lang="fr">née</span> Plunkett)</p>
         <p class="hero-sub">
           I help developers build intelligent things at the edge — from sensor to silicon to shipped product.
@@ -232,7 +232,7 @@
           <a href="https://www.oreilly.com/library/view/ai-at-the/9781098120191/" target="_blank" rel="noopener" class="btn btn-primary">Read on O'Reilly →</a>
         </div>
         <div class="book-cover-img">
-          <img src="images/book-cover.jpg" alt="" />
+          <img src="images/book-cover.jpg" alt="Book cover of AI at the Edge: Solving Real World Problems with Embedded Machine Learning, by Daniel Situnayake and Jenny Plunkett, published by O'Reilly Media." />
         </div>
       </div>
     </div>
@@ -246,11 +246,11 @@
 
       <!-- arXiv / Research -->
       <div class="writing-group">
-        <div class="writing-group-label">Research</div>
+        <h3 class="writing-group-label">Research</h3>
         <div class="writing-grid">
           <a href="https://arxiv.org/abs/2212.03332" target="_blank" rel="noopener" class="writing-card writing-card--featured">
             <div class="writing-tag">arXiv · Cornell University</div>
-            <h3>Edge Impulse: An MLOps Platform for Tiny Machine Learning</h3>
+            <h4>Edge Impulse: An MLOps Platform for Tiny Machine Learning</h4>
             <span class="writing-cta">Read paper →</span>
           </a>
         </div>
@@ -258,121 +258,121 @@
 
       <!-- Edge Impulse Blogs -->
       <div class="writing-group">
-        <div class="writing-group-label">Edge Impulse — Blogs &amp; Tutorials</div>
+        <h3 class="writing-group-label">Edge Impulse — Blogs &amp; Tutorials</h3>
         <div class="writing-grid">
           <a href="https://www.edgeimpulse.com/blog/infineon-sense2gol-pulse" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Tutorial</div>
-            <h3>Using Doppler Radar for Gesture Recognition with the Infineon Sense2GoL-Pulse</h3>
+            <h4>Using Doppler Radar for Gesture Recognition with the Infineon Sense2GoL-Pulse</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://www.edgeimpulse.com/blog/utilize-the-power-of-the-crowd-for-data-collection" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Blog</div>
-            <h3>Utilize the Power of the Crowd for Data Collection</h3>
+            <h4>Utilize the Power of the Crowd for Data Collection</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://www.edgeimpulse.com/blog/introducing-downsampling-for-time-series-data" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Blog</div>
-            <h3>Introducing Downsampling for Time Series Data</h3>
+            <h4>Introducing Downsampling for Time Series Data</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://www.edgeimpulse.com/blog/introducing-the-eon-tuner-edge-impulses-new-automl-tool-for-embedded-machine-learning" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Blog</div>
-            <h3>Introducing the EON Tuner: Edge Impulse's New AutoML Tool for Embedded Machine Learning</h3>
+            <h4>Introducing the EON Tuner: Edge Impulse's New AutoML Tool for Embedded Machine Learning</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://www.edgeimpulse.com/blog/bird-classification-lacuna-space" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Blog</div>
-            <h3>Bird Classification in Remote Areas with Lacuna Space and The Things Network</h3>
+            <h4>Bird Classification in Remote Areas with Lacuna Space and The Things Network</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://www.edgeimpulse.com/blog/continuous-audio-classification-directly-in-your-web-browser" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Blog</div>
-            <h3>Continuous Audio Classification Directly in Your Web Browser</h3>
+            <h4>Continuous Audio Classification Directly in Your Web Browser</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://www.edgeimpulse.com/blog/announcing-support-for-the-sony-spresense" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Blog</div>
-            <h3>Announcing Support for Sony's Spresense Microcontroller</h3>
+            <h4>Announcing Support for Sony's Spresense Microcontroller</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://www.edgeimpulse.com/blog/unleash-the-power-of-lte-mnb-iot-and-edge-ai-with-the-nrf9160-dk" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Blog</div>
-            <h3>Unleash the Power of LTE-M/NB-IoT &amp; Edge AI with the nRF9160 DK</h3>
+            <h4>Unleash the Power of LTE-M/NB-IoT &amp; Edge AI with the nRF9160 DK</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://www.edgeimpulse.com/blog/announcing-official-support-for-the-silicon-labs-xg24-dev-kit" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Blog</div>
-            <h3>Announcing Official Support for the Silicon Labs xG24 Dev Kit</h3>
+            <h4>Announcing Official Support for the Silicon Labs xG24 Dev Kit</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://www.edgeimpulse.com/blog/showcase-your-public-projects-with-markdown-readmes" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Blog</div>
-            <h3>Showcase Your Public Projects with Markdown READMEs</h3>
+            <h4>Showcase Your Public Projects with Markdown READMEs</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://www.edgeimpulse.com/blog/advanced-anomaly-detection-with-feature-importance" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Blog</div>
-            <h3>Advanced Anomaly Detection with Feature Importance</h3>
+            <h4>Advanced Anomaly Detection with Feature Importance</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://www.edgeimpulse.com/blog/3-ways-to-do-ai-assisted-labeling-for-object-detection" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Blog</div>
-            <h3>3 Ways to Do AI-Assisted Labeling for Object Detection</h3>
+            <h4>3 Ways to Do AI-Assisted Labeling for Object Detection</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://www.edgeimpulse.com/blog/rapidly-develop-machine-learning-models-for-edge-applications-over-ble" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Blog</div>
-            <h3>Rapidly Develop Machine Learning Models for Edge Applications Over BLE</h3>
+            <h4>Rapidly Develop Machine Learning Models for Edge Applications Over BLE</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://www.edgeimpulse.com/blog/announcing-official-support-for-the-arduino-nicla-sense-me" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Blog</div>
-            <h3>Announcing Official Support for the Arduino Nicla Sense ME</h3>
+            <h4>Announcing Official Support for the Arduino Nicla Sense ME</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://www.edgeimpulse.com/blog/announcing-official-support-for-the-infineon-cy8ckit-062s2-pioneer-kit" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Blog</div>
-            <h3>Announcing Official Support for the Infineon CY8CKIT-062S2 Pioneer Kit</h3>
+            <h4>Announcing Official Support for the Infineon CY8CKIT-062S2 Pioneer Kit</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://www.edgeimpulse.com/blog/bring-your-own-model-into-edge-impulse-with-onnx" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Blog</div>
-            <h3>Bring Your Own Model Into Edge Impulse with ONNX</h3>
+            <h4>Bring Your Own Model Into Edge Impulse with ONNX</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://www.edgeimpulse.com/blog/rapidly-detect-changes-in-your-environment-with-edge-impulse-and-nordic-thingy91" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Blog</div>
-            <h3>Rapidly Detect Changes in Your Environment with Edge Impulse and Nordic Thingy:91</h3>
+            <h4>Rapidly Detect Changes in Your Environment with Edge Impulse and Nordic Thingy:91</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://www.edgeimpulse.com/blog/solving-real-world-problems-with-embedded-machine-learning-ai-at-the-edge-by-daniel-situnayake-and-jenny-plunkett" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Blog</div>
-            <h3>Solving Real World Problems with Embedded Machine Learning: "AI at the Edge"</h3>
+            <h4>Solving Real World Problems with Embedded Machine Learning: "AI at the Edge"</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://developer.nvidia.com/blog/how-to-train-an-object-detection-model-for-visual-inspection-with-synthetic-data/" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Blog · NVIDIA</div>
-            <h3>How to Train an Object Detection Model for Visual Inspection with Synthetic Data</h3>
+            <h4>How to Train an Object Detection Model for Visual Inspection with Synthetic Data</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://www.edgeimpulse.com/blog/unlock-greater-data-flexibility-ingest-tabular-data/" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Blog</div>
-            <h3>Unlock Greater Data Flexibility: Ingest Tabular Data</h3>
+            <h4>Unlock Greater Data Flexibility: Ingest Tabular Data</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://www.edgeimpulse.com/blog/patchcore-boosts-visual-anomaly-detection-in-edge-impulse/" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Blog</div>
-            <h3>PatchCore Boosts Visual Anomaly Detection in Edge Impulse</h3>
+            <h4>PatchCore Boosts Visual Anomaly Detection in Edge Impulse</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://edgeimpulse.com/blog/impulse-experiments-revolutionize-your-ai-project-workflow/" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Blog</div>
-            <h3>Impulse Experiments: Revolutionize Your AI Project Workflow</h3>
+            <h4>Impulse Experiments: Revolutionize Your AI Project Workflow</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://www.edgeimpulse.com/blog/how-to-use-usd-assets-for-any-edge-ai-use-case-with-nvidia-omniverse/" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Blog</div>
-            <h3>How to Use USD Assets for Any Edge AI Use Case with NVIDIA Omniverse</h3>
+            <h4>How to Use USD Assets for Any Edge AI Use Case with NVIDIA Omniverse</h4>
             <span class="writing-cta">Read →</span>
           </a>
         </div>
@@ -380,46 +380,46 @@
 
       <!-- Edge Impulse Docs -->
       <div class="writing-group">
-        <div class="writing-group-label">Edge Impulse — Documentation</div>
+        <h3 class="writing-group-label">Edge Impulse — Documentation</h3>
         <div class="writing-grid">
           <a href="https://docs.edgeimpulse.com/docs/development-platforms/officially-supported-mcu-targets/arduino-nicla-sense-me" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Docs</div>
-            <h3>Getting Started with Arduino Nicla Sense ME</h3>
+            <h4>Getting Started with Arduino Nicla Sense ME</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://docs.edgeimpulse.com/docs/development-platforms/officially-supported-mcu-targets/nordic-semi-thingy53" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Docs</div>
-            <h3>Getting Started with Nordic Semi Thingy:53 &amp; nRF Edge Impulse App</h3>
+            <h4>Getting Started with Nordic Semi Thingy:53 &amp; nRF Edge Impulse App</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://docs.edgeimpulse.com/docs/sony-spresense" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Docs</div>
-            <h3>Getting Started with Sony's Spresense</h3>
+            <h4>Getting Started with Sony's Spresense</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://docs.edgeimpulse.com/docs/eon-tuner" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Docs</div>
-            <h3>EON Tuner Guide</h3>
+            <h4>EON Tuner Guide</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://docs.edgeimpulse.com/docs/integrations/nvidia-tao" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Docs</div>
-            <h3>NVIDIA TAO Toolkit — Edge Impulse Integration</h3>
+            <h4>NVIDIA TAO Toolkit — Edge Impulse Integration</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://docs.edgeimpulse.com/docs/integrations/nvidia-omniverse" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Docs</div>
-            <h3>NVIDIA Omniverse — Edge Impulse Integration</h3>
+            <h4>NVIDIA Omniverse — Edge Impulse Integration</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://docs.edgeimpulse.com/docs/edge-impulse-studio/data-acquisition/tabular-data" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Docs</div>
-            <h3>Tabular Data (Pre-processed &amp; Non-time-series)</h3>
+            <h4>Tabular Data (Pre-processed &amp; Non-time-series)</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://docs.edgeimpulse.com/docs/edge-impulse-studio/learning-blocks/visual-anomaly-detection" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Docs</div>
-            <h3>Visual Anomaly Detection (FOMO-AD)</h3>
+            <h4>Visual Anomaly Detection (FOMO-AD)</h4>
             <span class="writing-cta">Read →</span>
           </a>
         </div>
@@ -427,46 +427,46 @@
 
       <!-- Arm Mbed -->
       <div class="writing-group">
-        <div class="writing-group-label">Arm Mbed</div>
+        <h3 class="writing-group-label">Arm Mbed</h3>
         <div class="writing-grid">
           <a href="https://os.mbed.com/blog/entry/How-to-use-emWin-with-Mbed-OS/" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Blog</div>
-            <h3>How to Use emWin with Mbed OS</h3>
+            <h4>How to Use emWin with Mbed OS</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://os.mbed.com/blog/entry/How-to-LPCXpresso54608-touch-panel/" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Blog</div>
-            <h3>How to Use the LPCXpresso54608's Touch Panel</h3>
+            <h4>How to Use the LPCXpresso54608's Touch Panel</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://os.mbed.com/users/jplunkett/notebook/updating-component-to-mbed-os/" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Tutorial</div>
-            <h3>Updating an Old Mbed 2 Component to Mbed OS</h3>
+            <h4>Updating an Old Mbed 2 Component to Mbed OS</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://os.mbed.com/users/jplunkett/notebook/first-mbed-application/" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Tutorial</div>
-            <h3>Creating Your First Mbed Application</h3>
+            <h4>Creating Your First Mbed Application</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://os.mbed.com/questions/82191/mbed-http-compile-fail/" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Forum</div>
-            <h3>Library Compiling Issue</h3>
+            <h4>Library Compiling Issue</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://os.mbed.com/questions/82107/How-do-I-manage-the-code-in-my-local-rep/" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Forum</div>
-            <h3>Microbit &amp; Local Code Repository Issue</h3>
+            <h4>Microbit &amp; Local Code Repository Issue</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://os.mbed.com/questions/82092/How-to-get-led-to-blink-and-print-times-/" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Forum</div>
-            <h3>Beginning Developer Notes &amp; Advice</h3>
+            <h4>Beginning Developer Notes &amp; Advice</h4>
             <span class="writing-cta">Read →</span>
           </a>
           <a href="https://os.mbed.com/questions/81824/offline-API-document/" target="_blank" rel="noopener" class="writing-card">
             <div class="writing-tag">Forum</div>
-            <h3>How to View API Docs Offline</h3>
+            <h4>How to View API Docs Offline</h4>
             <span class="writing-cta">Read →</span>
           </a>
         </div>
@@ -853,7 +853,7 @@
         <div class="section-label">Contact</div>
         <h2 id="contactTitle">Let's <span class="accent">connect</span></h2>
         <div class="contact-links">
-          <a class="contact-link" id="email-link" href="mailto:hello&#64;jennyplunkett&#46;me">
+          <a class="contact-link" id="email-link" href="mailto:hello&#64;jennyplunkett&#46;me" aria-label="Email Jenny">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
             <span id="email-label">hello&#64;jennyplunkett&#46;me</span>
           </a>

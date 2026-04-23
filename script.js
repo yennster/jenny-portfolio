@@ -166,7 +166,7 @@ document.querySelectorAll('.writing-group').forEach(group => {
   const prevBtn = document.createElement('button');
   prevBtn.className = 'page-btn';
   prevBtn.setAttribute('aria-label', `Previous page of ${groupLabel}`);
-  prevBtn.innerHTML = '<span aria-hidden="true">←</span> Prev';
+  prevBtn.innerHTML = '<span aria-hidden="true">←</span> Previous';
 
   const info = document.createElement('span');
   info.className = 'page-info';
@@ -238,7 +238,7 @@ talksPagination.className = 'pagination';
 const talksPrev = document.createElement('button');
 talksPrev.className = 'page-btn';
 talksPrev.setAttribute('aria-label', 'Previous page of talks');
-talksPrev.innerHTML = '<span aria-hidden="true">←</span> Prev';
+talksPrev.innerHTML = '<span aria-hidden="true">←</span> Previous';
 const talksInfo = document.createElement('span');
 talksInfo.className = 'page-info';
 talksInfo.setAttribute('aria-hidden', 'true');
@@ -343,7 +343,13 @@ const sectionObserver = new IntersectionObserver(
   (entries) => entries.forEach(e => {
     if (e.isIntersecting) {
       navAs.forEach(a => {
-        a.classList.toggle('is-active', a.getAttribute('href') === `#${e.target.id}`);
+        const isActive = a.getAttribute('href') === `#${e.target.id}`;
+        a.classList.toggle('is-active', isActive);
+        if (isActive) {
+          a.setAttribute('aria-current', 'location');
+        } else {
+          a.removeAttribute('aria-current');
+        }
       });
     }
   }),
@@ -354,8 +360,10 @@ sections.forEach(s => sectionObserver.observe(s));
 // ── Search ────────────────────────────────────────────────────
 const searchToggle = document.getElementById('searchToggle');
 const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.platform) || (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
-searchToggle.dataset.tooltip = isMac ? 'Search (/ or ⌘K)' : 'Search (/ or Ctrl+K)';
+searchToggle.setAttribute('aria-label', isMac ? 'Search (slash or Command K)' : 'Search (slash or Control K)');
 const searchOverlay = document.getElementById('searchOverlay');
+const searchForm = document.getElementById('searchForm');
+searchForm?.addEventListener('submit', (e) => e.preventDefault());
 const searchInput = document.getElementById('searchInput');
 const searchCloseBtn = document.getElementById('searchClose');
 const searchResultsWriting = document.getElementById('searchResultsWriting');
