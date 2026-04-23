@@ -930,17 +930,30 @@
           });
           qrGenerated = true;
         }
+        overlay.classList.remove('is-closing');
         overlay.classList.add('is-open');
+        fab.classList.add('is-hidden');
         document.body.style.overflow = 'hidden';
       }
 
       function closeSheet() {
         overlay.classList.remove('is-open');
+        overlay.classList.add('is-closing');
+        fab.classList.remove('is-hidden');
         document.body.style.overflow = '';
+        setTimeout(() => overlay.classList.remove('is-closing'), 280);
       }
 
       fab.addEventListener('click', openSheet);
       closeBtn.addEventListener('click', closeSheet);
+
+      // Single attention beat after entrance animation completes
+      setTimeout(() => {
+        if (getComputedStyle(fab).display !== 'none') {
+          fab.classList.add('fab-beat');
+          fab.addEventListener('animationend', () => fab.classList.remove('fab-beat'), { once: true });
+        }
+      }, 1400);
       overlay.addEventListener('click', (e) => { if (e.target === overlay) closeSheet(); });
 
       const SHARE_ICON = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>';
