@@ -107,6 +107,10 @@ function scrollToEl(el) {
   window.scrollTo({ top, behavior: 'smooth' });
 }
 
+// Snapshot all cards before pagination hides any
+const allWritingCards = Array.from(document.querySelectorAll('.writing-card'));
+const allTalkCards = Array.from(document.querySelectorAll('.talk-card'));
+
 // ── Writing pagination ────────────────────────────────────────
 const PER_PAGE = 6;
 
@@ -261,3 +265,89 @@ const sectionObserver = new IntersectionObserver(
   { threshold: 0.35 }
 );
 sections.forEach(s => sectionObserver.observe(s));
+
+// ── Search ────────────────────────────────────────────────────
+const searchToggle = document.getElementById('searchToggle');
+const searchOverlay = document.getElementById('searchOverlay');
+const searchInput = document.getElementById('searchInput');
+const searchCloseBtn = document.getElementById('searchClose');
+const searchResultsWriting = document.getElementById('searchResultsWriting');
+const searchResultsTalks = document.getElementById('searchResultsTalks');
+const searchNoResults = document.getElementById('searchNoResults');
+const searchEmpty = document.getElementById('searchEmpty');
+
+function openSearch() {
+  searchOverlay.classList.add('open');
+  searchOverlay.removeAttribute('aria-hidden');
+  document.body.style.overflow = 'hidden';
+  searchInput.focus();
+}
+
+function closeSearch() {
+  searchOverlay.classList.remove('open');
+  searchOverlay.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+  searchInput.blur();
+  searchInput.value = '';
+  searchResultsWriting.innerHTML = '';
+  searchResultsTalks.innerHTML = '';
+  searchNoResults.hidden = true;
+  searchEmpty.hidden = false;
+}
+
+searchToggle.addEventListener('click', openSearch);
+searchCloseBtn.addEventListener('click', closeSearch);
+
+// Close shortcuts fired while search input has focus
+searchInput.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { e.preventDefault(); closeSearch(); return; }
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); closeSearch(); }
+});
+
+// Global shortcuts to open search
+document.addEventListener('keydown', e => {
+  if (searchOverlay.classList.contains('open')) return;
+  const inInput = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName);
+  if (!inInput && e.key === '/') { e.preventDefault(); openSearch(); return; }
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
+});
+
+function cardMatches(card, terms) {
+  const text = card.textContent.toLowerCase();
+  return terms.every(t => text.includes(t));
+}
+
+function renderGroup(container, cards, label) {
+  if (!cards.length) { container.innerHTML = ''; return; }
+  container.innerHTML = `
+    <div class="search-group-header">${label} <span class="search-count">${cards.length}</span></div>
+    <div class="search-results-grid"></div>`;
+  const grid = container.querySelector('.search-results-grid');
+  cards.forEach(c => {
+    const clone = c.cloneNode(true);
+    clone.style.display = '';
+    clone.style.animation = '';
+    grid.appendChild(clone);
+  });
+}
+
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.trim().toLowerCase();
+  const terms = q.split(/\s+/).filter(Boolean);
+
+  if (!terms.length) {
+    searchResultsWriting.innerHTML = '';
+    searchResultsTalks.innerHTML = '';
+    searchNoResults.hidden = true;
+    searchEmpty.hidden = false;
+    return;
+  }
+
+  searchEmpty.hidden = true;
+  const matchWriting = allWritingCards.filter(c => cardMatches(c, terms));
+  const matchTalks = allTalkCards.filter(c => cardMatches(c, terms));
+
+  renderGroup(searchResultsWriting, matchWriting, 'Writing');
+  renderGroup(searchResultsTalks, matchTalks, 'Talks');
+  searchNoResults.hidden = matchWriting.length + matchTalks.length > 0;
+});
