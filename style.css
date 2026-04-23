@@ -808,10 +808,19 @@ section { padding: 7rem 0; }
   cursor: pointer;
   transition: all 0.15s;
 }
-.year-btn:hover, .year-btn.active {
+.year-btn:hover {
   background: var(--teal);
   border-color: var(--teal);
   color: oklch(99% 0.004 193);
+}
+/* Active state uses non-color cues so it stays distinct under any
+   color-vision deficiency (SC 1.4.1): inset ring + bolder weight. */
+.year-btn.active {
+  background: var(--teal);
+  border-color: var(--text);
+  color: oklch(99% 0.004 193);
+  font-weight: 800;
+  box-shadow: inset 0 0 0 2px oklch(99% 0.004 193);
 }
 
 .talks-grid {
