@@ -298,18 +298,19 @@ function closeSearch() {
 searchToggle.addEventListener('click', openSearch);
 searchCloseBtn.addEventListener('click', closeSearch);
 
-// Close shortcuts fired while search input has focus
-searchInput.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { e.preventDefault(); closeSearch(); return; }
-  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); closeSearch(); }
-});
-
-// Global shortcuts to open search
+// Global search shortcuts
 document.addEventListener('keydown', e => {
-  if (searchOverlay.classList.contains('open')) return;
-  const inInput = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName);
-  if (!inInput && e.key === '/') { e.preventDefault(); openSearch(); return; }
-  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
+  const isOpen = searchOverlay.classList.contains('open');
+  if (e.key === 'Escape' && isOpen) { e.preventDefault(); closeSearch(); return; }
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault();
+    isOpen ? closeSearch() : openSearch();
+    return;
+  }
+  if (!isOpen) {
+    const inInput = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName);
+    if (!inInput && e.key === '/') { e.preventDefault(); openSearch(); }
+  }
 });
 
 function cardMatches(card, terms) {
