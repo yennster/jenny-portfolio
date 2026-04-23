@@ -63,9 +63,11 @@ html { scroll-behavior: smooth; }
 
 #main { scroll-margin-top: calc(var(--nav-h) + 0.5rem); }
 
-/* Global visible focus indicator */
+/* Global visible focus indicator. The dark text-color outline ensures
+   3:1 contrast (SC 1.4.11) against any background, including the
+   light teal-lt surfaces where a teal-only ring would fail. */
 :focus-visible {
-  outline: 2px solid var(--teal);
+  outline: 2px solid var(--text);
   outline-offset: 2px;
 }
 /* Preserve rounded pill look on pill-shaped focus targets */
@@ -1233,8 +1235,8 @@ footer p { font-size: 0.8rem; color: var(--text-muted); }
   background: var(--bg2);
   border: none;
   border-radius: 50%;
-  width: 2rem;
-  height: 2rem;
+  width: 2.75rem;
+  height: 2.75rem;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -343,7 +343,13 @@ const sectionObserver = new IntersectionObserver(
   (entries) => entries.forEach(e => {
     if (e.isIntersecting) {
       navAs.forEach(a => {
-        a.classList.toggle('is-active', a.getAttribute('href') === `#${e.target.id}`);
+        const isActive = a.getAttribute('href') === `#${e.target.id}`;
+        a.classList.toggle('is-active', isActive);
+        if (isActive) {
+          a.setAttribute('aria-current', 'location');
+        } else {
+          a.removeAttribute('aria-current');
+        }
       });
     }
   }),
@@ -354,7 +360,7 @@ sections.forEach(s => sectionObserver.observe(s));
 // ── Search ────────────────────────────────────────────────────
 const searchToggle = document.getElementById('searchToggle');
 const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.platform) || (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
-searchToggle.dataset.tooltip = isMac ? 'Search (/ or ⌘K)' : 'Search (/ or Ctrl+K)';
+searchToggle.setAttribute('aria-label', isMac ? 'Search (slash or Command K)' : 'Search (slash or Control K)');
 const searchOverlay = document.getElementById('searchOverlay');
 const searchInput = document.getElementById('searchInput');
 const searchCloseBtn = document.getElementById('searchClose');
