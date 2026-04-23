@@ -225,13 +225,13 @@ talksPrev.addEventListener('click', () => {
   if (talksPage > 0) {
     talksPage--;
     renderTalks();
-    scrollToEl(document.getElementById('talks'));
+    scrollToEl(yearFilter);
   }
 });
 talksNext.addEventListener('click', () => {
   talksPage++;
   renderTalks();
-  scrollToEl(document.getElementById('talks'));
+  scrollToEl(yearFilter);
 });
 
 if (yearFilter && talksGrid) {
