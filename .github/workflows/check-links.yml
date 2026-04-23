@@ -1,0 +1,29 @@
+name: Check Links
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Run weekly on Mondays at 9am UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+
+jobs:
+  check-links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >
+            --verbose
+            --no-progress
+            --exclude-loopback
+            --exclude 'mailto:'
+            './**/*.html'
+            './**/*.md'
+          fail: true
