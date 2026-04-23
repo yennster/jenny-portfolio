@@ -362,6 +362,8 @@ const searchToggle = document.getElementById('searchToggle');
 const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.platform) || (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
 searchToggle.setAttribute('aria-label', isMac ? 'Search (slash or Command K)' : 'Search (slash or Control K)');
 const searchOverlay = document.getElementById('searchOverlay');
+const searchForm = document.getElementById('searchForm');
+searchForm?.addEventListener('submit', (e) => e.preventDefault());
 const searchInput = document.getElementById('searchInput');
 const searchCloseBtn = document.getElementById('searchClose');
 const searchResultsWriting = document.getElementById('searchResultsWriting');

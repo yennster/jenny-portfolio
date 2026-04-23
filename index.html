@@ -61,7 +61,7 @@
     <h2 id="searchTitle" class="sr-only">Search site</h2>
     <div class="search-header">
       <div class="container">
-        <form class="search-input-wrap" role="search" aria-label="Site search" onsubmit="return false;">
+        <form class="search-input-wrap" id="searchForm" role="search" aria-label="Site search">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           <input type="search" id="searchInput" placeholder="Search talks, writing…" aria-label="Search talks and writing" />
           <button type="button" id="searchClose" aria-label="Close search">
@@ -853,7 +853,7 @@
         <div class="section-label">Contact</div>
         <h2 id="contactTitle">Let's <span class="accent">connect</span></h2>
         <div class="contact-links">
-          <a class="contact-link" id="email-link" href="mailto:hello&#64;jennyplunkett&#46;me">
+          <a class="contact-link" id="email-link" href="mailto:hello&#64;jennyplunkett&#46;me" aria-label="Email Jenny">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
             <span id="email-label">hello&#64;jennyplunkett&#46;me</span>
           </a>

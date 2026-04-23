@@ -980,8 +980,9 @@ footer p { font-size: 0.8rem; color: var(--text-muted); }
   color: var(--teal);
 }
 .page-btn:disabled {
-  opacity: 0.35;
-  cursor: default;
+  opacity: 0.45;
+  cursor: not-allowed;
+  border-style: dashed;
 }
 
 .page-info {
