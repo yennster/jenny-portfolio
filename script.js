@@ -268,6 +268,8 @@ sections.forEach(s => sectionObserver.observe(s));
 
 // ── Search ────────────────────────────────────────────────────
 const searchToggle = document.getElementById('searchToggle');
+const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.platform) || (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
+searchToggle.dataset.tooltip = isMac ? 'Search (/ or ⌘K)' : 'Search (/ or Ctrl+K)';
 const searchOverlay = document.getElementById('searchOverlay');
 const searchInput = document.getElementById('searchInput');
 const searchCloseBtn = document.getElementById('searchClose');
