@@ -143,29 +143,14 @@ function scrollToEl(el) {
 const allWritingCards = Array.from(document.querySelectorAll('.writing-card'));
 const allTalkCards = Array.from(document.querySelectorAll('.talk-card'));
 
-// ── Writing pagination ────────────────────────────────────────
-const PER_PAGE = 6;
-
-document.querySelectorAll('.writing-group').forEach(group => {
-  const grid = group.querySelector('.writing-grid');
-  if (!grid) return;
-
-  const cards = Array.from(grid.querySelectorAll('.writing-card'));
-  if (cards.length <= PER_PAGE) return; // no pagination needed
-
-  let page = 0;
-  const totalPages = Math.ceil(cards.length / PER_PAGE);
-
-  // Build pagination bar
+// ── Pagination helper (shared by writing groups + talks) ─────
+function createPagination({ label, itemNoun, mountAfter, mountInto, animateStep = 40 }) {
   const bar = document.createElement('div');
   bar.className = 'pagination';
 
-  // Derive a human-readable label for this group for live announcements.
-  const groupLabel = (group.querySelector('.writing-group-label')?.textContent || 'Writing').trim();
-
   const prevBtn = document.createElement('button');
   prevBtn.className = 'page-btn';
-  prevBtn.setAttribute('aria-label', `Previous page of ${groupLabel}`);
+  prevBtn.setAttribute('aria-label', `Previous page of ${label}`);
   prevBtn.innerHTML = '<span aria-hidden="true">←</span> Previous';
 
   const info = document.createElement('span');
@@ -174,50 +159,79 @@ document.querySelectorAll('.writing-group').forEach(group => {
 
   const nextBtn = document.createElement('button');
   nextBtn.className = 'page-btn';
-  nextBtn.setAttribute('aria-label', `Next page of ${groupLabel}`);
+  nextBtn.setAttribute('aria-label', `Next page of ${label}`);
   nextBtn.innerHTML = 'Next <span aria-hidden="true">→</span>';
 
   bar.append(prevBtn, info, nextBtn);
-  group.appendChild(bar);
 
-  // Polite live region for SR announcements of page changes.
   const live = document.createElement('div');
   live.className = 'sr-only';
   live.setAttribute('aria-live', 'polite');
   live.setAttribute('aria-atomic', 'true');
-  group.appendChild(live);
+
+  if (mountInto) { mountInto.appendChild(bar); mountInto.appendChild(live); }
+  else if (mountAfter) { mountAfter.after(bar); bar.after(live); }
+
   let liveTimer = null;
-  function announce(shownCount) {
+  function announce(page, totalPages, shownCount) {
     clearTimeout(liveTimer);
     live.textContent = '';
     liveTimer = setTimeout(() => {
-      live.textContent = `${groupLabel}: page ${page + 1} of ${totalPages}, showing ${shownCount} post${shownCount === 1 ? '' : 's'}.`;
+      live.textContent = `${label}: page ${page} of ${totalPages}, showing ${shownCount} ${itemNoun}${shownCount === 1 ? '' : 's'}.`;
     }, 60);
   }
 
-  function render(opts = {}) {
-    const start = page * PER_PAGE;
-    let shownCount = 0;
+  function applyVisibility(cards, startIdx, perPage) {
+    let shown = 0;
     cards.forEach((card, i) => {
-      const show = i >= start && i < start + PER_PAGE;
+      const show = i >= startIdx && i < startIdx + perPage;
       card.style.display = show ? '' : 'none';
       if (show) {
-        shownCount++;
+        shown++;
         card.style.animation = 'none';
         card.offsetHeight;
-        card.style.animation = `fadeInUp 0.3s ${(i - start) * 40}ms ease both`;
+        card.style.animation = `fadeInUp 0.3s ${(i - startIdx) * animateStep}ms ease both`;
       }
     });
+    return shown;
+  }
+
+  function setControls(page, totalPages, visible) {
+    bar.style.display = visible ? 'flex' : 'none';
     info.textContent = `${page + 1} / ${totalPages}`;
     prevBtn.disabled = page === 0;
     nextBtn.disabled = page === totalPages - 1;
-    if (opts.announce) announce(shownCount);
   }
 
-  prevBtn.addEventListener('click', () => {
+  return { bar, prevBtn, nextBtn, info, announce, applyVisibility, setControls };
+}
+
+// ── Writing pagination ────────────────────────────────────────
+const PER_PAGE = 6;
+
+document.querySelectorAll('.writing-group').forEach(group => {
+  const grid = group.querySelector('.writing-grid');
+  if (!grid) return;
+
+  const cards = Array.from(grid.querySelectorAll('.writing-card'));
+  if (cards.length <= PER_PAGE) return;
+
+  const groupLabel = (group.querySelector('.writing-group-label')?.textContent || 'Writing').trim();
+  const totalPages = Math.ceil(cards.length / PER_PAGE);
+  let page = 0;
+
+  const p = createPagination({ label: groupLabel, itemNoun: 'post', mountInto: group, animateStep: 40 });
+
+  function render(opts = {}) {
+    const shown = p.applyVisibility(cards, page * PER_PAGE, PER_PAGE);
+    p.setControls(page, totalPages, true);
+    if (opts.announce) p.announce(page + 1, totalPages, shown);
+  }
+
+  p.prevBtn.addEventListener('click', () => {
     if (page > 0) { page--; render({ announce: true }); scrollToEl(group); }
   });
-  nextBtn.addEventListener('click', () => {
+  p.nextBtn.addEventListener('click', () => {
     if (page < totalPages - 1) { page++; render({ announce: true }); scrollToEl(group); }
   });
 
@@ -232,92 +246,28 @@ const talksGrid = document.getElementById('talksGrid');
 let talksYear = '2024';
 let talksPage = 0;
 
-// Build pagination bar for talks (reused across renders)
-const talksPagination = document.createElement('div');
-talksPagination.className = 'pagination';
-const talksPrev = document.createElement('button');
-talksPrev.className = 'page-btn';
-talksPrev.setAttribute('aria-label', 'Previous page of talks');
-talksPrev.innerHTML = '<span aria-hidden="true">←</span> Previous';
-const talksInfo = document.createElement('span');
-talksInfo.className = 'page-info';
-talksInfo.setAttribute('aria-hidden', 'true');
-const talksNext = document.createElement('button');
-talksNext.className = 'page-btn';
-talksNext.setAttribute('aria-label', 'Next page of talks');
-talksNext.innerHTML = 'Next <span aria-hidden="true">→</span>';
-talksPagination.append(talksPrev, talksInfo, talksNext);
-talksGrid.after(talksPagination);
+if (yearFilter && talksGrid) {
+  const p = createPagination({ label: 'Talks', itemNoun: 'talk', mountAfter: talksGrid, animateStep: 35 });
 
-// Polite live region for announcing page changes to screen readers.
-const talksLive = document.createElement('div');
-talksLive.className = 'sr-only';
-talksLive.setAttribute('aria-live', 'polite');
-talksLive.setAttribute('aria-atomic', 'true');
-talksPagination.after(talksLive);
-let talksLiveTimer = null;
-function announceTalksPage(page, totalPages, count) {
-  if (!talksLive) return;
-  clearTimeout(talksLiveTimer);
-  talksLive.textContent = '';
-  talksLiveTimer = setTimeout(() => {
-    talksLive.textContent = `Page ${page} of ${totalPages}, showing ${count} talk${count === 1 ? '' : 's'}.`;
-  }, 60);
-}
+  function renderTalks(opts = {}) {
+    const allCards = Array.from(talksGrid.querySelectorAll('.talk-card'));
+    const matching = allCards.filter(c => talksYear === 'all' || c.dataset.year === talksYear);
+    const totalPages = Math.max(1, Math.ceil(matching.length / TALKS_PER_PAGE));
+    talksPage = Math.min(talksPage, Math.max(0, totalPages - 1));
 
-function renderTalks(opts = {}) {
-  const allCards = Array.from(talksGrid.querySelectorAll('.talk-card'));
-  const matching = allCards.filter(c => talksYear === 'all' || c.dataset.year === talksYear);
-  const total = matching.length;
-  const totalPages = Math.max(1, Math.ceil(total / TALKS_PER_PAGE));
+    allCards.forEach(c => c.style.display = 'none');
+    const shown = p.applyVisibility(matching, talksPage * TALKS_PER_PAGE, TALKS_PER_PAGE);
+    p.setControls(talksPage, totalPages, totalPages > 1);
+    if (opts.announce) p.announce(talksPage + 1, totalPages, shown);
+  }
 
-  // clamp page
-  talksPage = Math.min(talksPage, Math.max(0, totalPages - 1));
-
-  const start = talksPage * TALKS_PER_PAGE;
-
-  allCards.forEach(c => c.style.display = 'none');
-  let shownCount = 0;
-  matching.forEach((c, i) => {
-    const show = i >= start && i < start + TALKS_PER_PAGE;
-    c.style.display = show ? '' : 'none';
-    if (show) {
-      shownCount++;
-      c.style.animation = 'none';
-      c.offsetHeight;
-      c.style.animation = `fadeInUp 0.3s ${(i - start) * 35}ms ease both`;
-    }
+  p.prevBtn.addEventListener('click', () => {
+    if (talksPage > 0) { talksPage--; renderTalks({ announce: true }); scrollToEl(yearFilter); }
+  });
+  p.nextBtn.addEventListener('click', () => {
+    talksPage++; renderTalks({ announce: true }); scrollToEl(yearFilter);
   });
 
-  // pagination controls
-  if (totalPages <= 1) {
-    talksPagination.style.display = 'none';
-  } else {
-    talksPagination.style.display = 'flex';
-    talksInfo.textContent = `${talksPage + 1} / ${totalPages}`;
-    talksPrev.disabled = talksPage === 0;
-    talksNext.disabled = talksPage === totalPages - 1;
-  }
-
-  if (opts.announce) {
-    announceTalksPage(talksPage + 1, totalPages, shownCount);
-  }
-}
-
-talksPrev.addEventListener('click', () => {
-  if (talksPage > 0) {
-    talksPage--;
-    renderTalks({ announce: true });
-    scrollToEl(yearFilter);
-  }
-});
-talksNext.addEventListener('click', () => {
-  talksPage++;
-  renderTalks({ announce: true });
-  scrollToEl(yearFilter);
-});
-
-if (yearFilter && talksGrid) {
   renderTalks();
   yearFilter.addEventListener('click', (e) => {
     const btn = e.target.closest('.year-btn');
@@ -336,7 +286,10 @@ if (yearFilter && talksGrid) {
 
 // ── Active nav highlight on scroll ───────────────────────────
 // Toggle the .is-active class so the CSS underline affordance applies
-// (not color alone — SC 1.4.1 Use of Color).
+// (not color alone — SC 1.4.1 Use of Color). A percentage threshold
+// fails for sections taller than the viewport (on mobile #writing can
+// be 4× viewport height and never reach 35% visibility), so use a
+// rootMargin band near the top of the viewport instead.
 const sections = document.querySelectorAll('section[id]');
 const navAs = document.querySelectorAll('.nav-links a:not(.nav-cta)');
 const sectionObserver = new IntersectionObserver(
@@ -353,7 +306,7 @@ const sectionObserver = new IntersectionObserver(
       });
     }
   }),
-  { threshold: 0.35 }
+  { rootMargin: '-80px 0px -70% 0px', threshold: 0 }
 );
 sections.forEach(s => sectionObserver.observe(s));
 
