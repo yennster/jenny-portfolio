@@ -161,6 +161,8 @@
   --teal-lt:   oklch(28% 0.045 192);
   --teal-mid:  oklch(60% 0.10 192);
   --on-teal:   oklch(14% 0.015 193);
+  --nav-bg:    oklch(16% 0.015 193 / 0.88);
+  --nav-panel-bg: oklch(16% 0.015 193 / 0.97);
   --accent-glow: color-mix(in oklch, var(--teal) 18%, transparent);
   color-scheme: dark;
 }
