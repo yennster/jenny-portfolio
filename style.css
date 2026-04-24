@@ -785,7 +785,7 @@ section { padding: 7rem 0; }
 .writing-card:hover .writing-cta { letter-spacing: 0.03em; }
 
 /* ── Talks ──────────────────────────────────────────────────── */
-#talks { background: var(--bg2); }
+#speaking { background: var(--bg2); }
 .section-intro { color: var(--text-muted); margin-bottom: 2.5rem; max-width: 65ch; }
 
 /* Year filter */
@@ -1156,6 +1156,7 @@ footer p { font-size: 0.8rem; color: var(--text-muted); }
   animation: fab-beat 0.48s cubic-bezier(0.25, 1, 0.5, 1);
 }
 .linkedin-fab.is-hidden {
+  animation: none;
   opacity: 0;
   transform: translateY(1rem) scale(0.85);
   pointer-events: none;
