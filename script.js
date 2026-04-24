@@ -357,14 +357,23 @@ function openSearch() {
   searchOverlay.classList.add('open');
   searchOverlay.removeAttribute('aria-hidden');
   setBackgroundInert(true);
+  document.getElementById('linkedinFab')?.classList.add('is-hidden');
   document.body.style.overflow = 'hidden';
   searchInput.focus();
+}
+
+function syncSearchUrl(q) {
+  const url = new URL(window.location.href);
+  if (q) url.searchParams.set('q', q);
+  else url.searchParams.delete('q');
+  history.replaceState(null, '', url.toString());
 }
 
 function closeSearch() {
   searchOverlay.classList.remove('open');
   searchOverlay.setAttribute('aria-hidden', 'true');
   setBackgroundInert(false);
+  document.getElementById('linkedinFab')?.classList.remove('is-hidden');
   document.body.style.overflow = '';
   searchInput.blur();
   searchInput.value = '';
@@ -373,6 +382,7 @@ function closeSearch() {
   searchNoResults.hidden = true;
   searchEmpty.hidden = false;
   if (searchStatus) searchStatus.textContent = '';
+  syncSearchUrl('');
   // Return focus to the element that opened the search (usually searchToggle)
   const target = searchPreviousFocus && typeof searchPreviousFocus.focus === 'function'
     ? searchPreviousFocus
@@ -460,6 +470,7 @@ function renderGroup(container, cards, label) {
 searchInput.addEventListener('input', () => {
   const q = searchInput.value.trim().toLowerCase();
   const terms = q.split(/\s+/).filter(Boolean);
+  syncSearchUrl(searchInput.value.trim());
 
   if (!terms.length) {
     searchResultsWriting.innerHTML = '';
@@ -488,6 +499,14 @@ searchInput.addEventListener('input', () => {
   }
   announceSearchStatus(msg);
 });
+
+// Deep-link: if the URL has ?q=..., open search and run the query on load.
+const initialQ = new URLSearchParams(window.location.search).get('q');
+if (initialQ) {
+  openSearch();
+  searchInput.value = initialQ;
+  searchInput.dispatchEvent(new Event('input'));
+}
 
 // ── External links: announce "opens in new tab" to assistive tech ──
 // Strip trailing decorative glyphs (arrows, chevrons, ellipses, pipes) so
