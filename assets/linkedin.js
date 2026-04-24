@@ -127,14 +127,20 @@
   }
 
   shareBtn.addEventListener('click', async () => {
+    let method = 'copy';
     if (navigator.share) {
       try {
         await navigator.share({ title: 'Jenny Speelman on LinkedIn', url: LINKEDIN_URL });
+        method = 'native_share';
       } catch (e) {
-        if (e.name !== 'AbortError') await copyFallback();
+        if (e.name === 'AbortError') method = 'share_aborted';
+        else { await copyFallback(); method = 'copy_after_share_error'; }
       }
     } else {
       await copyFallback();
+    }
+    if (typeof plausible === 'function') {
+      plausible('LinkedIn Share', { props: { method } });
     }
   });
 

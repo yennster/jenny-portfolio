@@ -43,7 +43,11 @@ function closeNav({ returnFocus = false } = {}) {
 }
 
 burger.addEventListener('click', () => {
-  navLinks.classList.contains('open') ? closeNav() : openNav();
+  const opening = !navLinks.classList.contains('open');
+  opening ? openNav() : closeNav();
+  if (typeof plausible === 'function') {
+    plausible('Mobile Menu', { props: { action: opening ? 'open' : 'close' } });
+  }
 });
 navLinks.querySelectorAll('a').forEach(a => {
   a.addEventListener('click', () => closeNav());
@@ -56,6 +60,61 @@ document.addEventListener('keydown', (e) => {
     closeNav({ returnFocus: true });
   }
 });
+
+// ── Theme toggle ───────────────────────────────────────────────
+// Persists an explicit user choice in localStorage. If unset,
+// the media query in CSS takes over and follows the OS setting.
+(function () {
+  const toggle = document.getElementById('themeToggle');
+  const meta = document.getElementById('themeColorMeta')
+            || document.querySelector('meta[name="theme-color"]');
+  if (!toggle) return;
+
+  const THEME_LIGHT = '#0d6b63';
+  const THEME_DARK  = '#0b2725';
+  const osDark = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+
+  const currentTheme = () => {
+    const explicit = document.documentElement.getAttribute('data-theme');
+    if (explicit === 'light' || explicit === 'dark') return explicit;
+    return osDark && osDark.matches ? 'dark' : 'light';
+  };
+
+  const syncButton = () => {
+    const t = currentTheme();
+    const next = t === 'dark' ? 'light' : 'dark';
+    toggle.setAttribute('aria-label', `Switch to ${next} mode`);
+    toggle.setAttribute('aria-pressed', t === 'dark' ? 'true' : 'false');
+    if (meta) meta.setAttribute('content', t === 'dark' ? THEME_DARK : THEME_LIGHT);
+  };
+
+  toggle.addEventListener('click', () => {
+    const next = currentTheme() === 'dark' ? 'light' : 'dark';
+    const osDefault = osDark && osDark.matches ? 'dark' : 'light';
+    if (next === osDefault) {
+      // Clicking back to the OS default — drop the pin so future OS
+      // changes auto-apply instead of leaving the site stuck.
+      document.documentElement.removeAttribute('data-theme');
+      try { localStorage.removeItem('theme'); } catch (_) {}
+    } else {
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (_) {}
+    }
+    syncButton();
+    if (typeof plausible === 'function') plausible('Theme Toggle', { props: { theme: next } });
+  });
+
+  // Follow OS changes when the user hasn't pinned a choice.
+  if (osDark && osDark.addEventListener) {
+    osDark.addEventListener('change', () => {
+      let stored = null;
+      try { stored = localStorage.getItem('theme'); } catch (_) {}
+      if (stored !== 'light' && stored !== 'dark') syncButton();
+    });
+  }
+
+  syncButton();
+})();
 
 // Align timeline dots with job title in each card
 function alignTimelineMarkers() {
@@ -523,9 +582,9 @@ document.querySelectorAll('a[target="_blank"]').forEach(a => {
   a.setAttribute('aria-label', `${text} (opens in new tab)`);
 });
 
-// ── GA4 custom event tracking ────────────────────────────────
-function track(name, params) {
-  if (typeof gtag === 'function') gtag('event', name, params || {});
+// ── Plausible custom event tracking ──────────────────────────
+function track(name, props) {
+  if (typeof plausible === 'function') plausible(name, props ? { props } : undefined);
 }
 
 function cardTitle(card) {
@@ -536,28 +595,35 @@ function cardTitle(card) {
 document.addEventListener('click', (e) => {
   const card = e.target.closest('.writing-card, .talk-card');
   if (card) {
-    track('select_content', {
-      content_type: card.classList.contains('talk-card') ? 'talk' : 'writing',
-      item_id: card.href || '',
-      item_name: cardTitle(card),
+    track('Card Click', {
+      type: card.classList.contains('talk-card') ? 'talk' : 'writing',
+      title: cardTitle(card),
     });
     return;
   }
   const navLink = e.target.closest('.nav-links a[href^="#"]');
   if (navLink) {
-    track('nav_click', { section: navLink.getAttribute('href').slice(1) });
+    track('Nav Click', { section: navLink.getAttribute('href').slice(1) });
+    return;
+  }
+  const heroCta = e.target.closest('.hero-ctas a[href^="#"]');
+  if (heroCta) {
+    track('Hero CTA', {
+      cta: heroCta.textContent.trim(),
+      target: heroCta.getAttribute('href').slice(1),
+    });
     return;
   }
   if (e.target.closest('#email-link')) {
-    track('contact_click', { channel: 'email' });
+    track('Contact Click', { channel: 'email' });
     return;
   }
   if (e.target.closest('#linkedinFab, a[href*="linkedin.com/in/"]')) {
-    track('contact_click', { channel: 'linkedin' });
+    track('Contact Click', { channel: 'linkedin' });
   }
 });
 
-searchToggle?.addEventListener('click', () => track('search_open', { method: 'button' }));
+searchToggle?.addEventListener('click', () => track('Search Open', { method: 'button' }));
 
 let searchTrackTimer = null;
 searchInput?.addEventListener('input', () => {
@@ -567,11 +633,11 @@ searchInput?.addEventListener('input', () => {
   searchTrackTimer = setTimeout(() => {
     const w = searchResultsWriting.querySelectorAll('.writing-card').length;
     const t = searchResultsTalks.querySelectorAll('.talk-card').length;
-    track('search', { search_term: q.toLowerCase(), result_count: w + t });
+    track('Search', { term: q.toLowerCase(), result_count: w + t });
   }, 800);
 });
 
 yearFilter?.addEventListener('click', (e) => {
   const btn = e.target.closest('.year-btn');
-  if (btn) track('select_filter', { filter: 'talks_year', value: btn.dataset.year });
+  if (btn) track('Filter', { filter: 'talks_year', value: btn.dataset.year });
 });

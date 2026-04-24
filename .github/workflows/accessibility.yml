@@ -1,0 +1,35 @@
+name: Accessibility
+
+# Runs pa11y-ci (axe-core + HTMLCS) against the built static site.
+# The color-contrast rule is disabled in .pa11yci.json because axe-core
+# still has false positives on CSS oklch() colors; contrast is verified
+# separately by Lighthouse, which samples the actually rendered pixels.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  pa11y:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pa11y-ci and a static server
+        run: npm install --no-save pa11y-ci@4 serve@14 wait-on@8
+
+      - name: Start static server
+        run: npx serve -l 3000 . &
+
+      - name: Wait for server
+        run: npx wait-on http://localhost:3000/ --timeout 30000
+
+      - name: Run pa11y-ci (WCAG 2.1 AA, axe + HTMLCS)
+        run: npx pa11y-ci --config .pa11yci.json

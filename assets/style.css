@@ -1,3 +1,97 @@
+/* ── Fonts (self-hosted) ─────────────────────────────────────
+   Mirrors Google Fonts' subsetting (latin, latin-ext, vietnamese)
+   and unicode-ranges so the browser only downloads the subsets
+   it needs. Bricolage Grotesque ships as a single variable-font
+   file per subset covering weights 400–800. */
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/atkinson-hyperlegible-400-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/atkinson-hyperlegible-400-normal-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../fonts/atkinson-hyperlegible-700-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../fonts/atkinson-hyperlegible-700-normal-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/atkinson-hyperlegible-400-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/atkinson-hyperlegible-400-normal-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../fonts/atkinson-hyperlegible-700-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../fonts/atkinson-hyperlegible-700-normal-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('../fonts/bricolage-grotesque-vf-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('../fonts/bricolage-grotesque-vf-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('../fonts/bricolage-grotesque-vf-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 /* ── Reset & tokens ─────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -12,6 +106,9 @@
   --teal:      oklch(48% 0.13 192);
   --teal-lt:   oklch(94.5% 0.022 192);
   --teal-mid:  oklch(72% 0.08 192);
+  --on-teal:   oklch(99% 0.004 193);
+  --nav-bg:    oklch(98% 0.007 193 / 0.88);
+  --nav-panel-bg: oklch(98% 0.007 193 / 0.97);
   --accent:    var(--teal);
   --accent2:   var(--teal);
   --accent-glow: color-mix(in oklch, var(--teal) 10%, transparent);
@@ -23,6 +120,49 @@
   --max-w: 1100px;
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  color-scheme: light;
+}
+
+/* ── Dark mode ─────────────────────────────────────────────────
+   Applied automatically if the OS prefers dark, or forced via
+   [data-theme="dark"] set by the in-head script (user toggle).
+   Token lightnesses verified against WCAG 2.1 AA (4.5:1 text,
+   3:1 non-text).
+*/
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:        oklch(16% 0.015 193);
+    --bg2:       oklch(20% 0.018 193);
+    --bg3:       oklch(24% 0.020 193);
+    --surface:   oklch(19% 0.017 193);
+    --border:    oklch(32% 0.020 193);
+    --text:      oklch(96% 0.005 200);
+    --text-muted:oklch(72% 0.012 200);
+    --teal:      oklch(78% 0.13 192);
+    --teal-lt:   oklch(28% 0.045 192);
+    --teal-mid:  oklch(60% 0.10 192);
+    --on-teal:   oklch(14% 0.015 193);
+    --nav-bg:    oklch(16% 0.015 193 / 0.88);
+    --nav-panel-bg: oklch(16% 0.015 193 / 0.97);
+    --accent-glow: color-mix(in oklch, var(--teal) 18%, transparent);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:        oklch(16% 0.015 193);
+  --bg2:       oklch(20% 0.018 193);
+  --bg3:       oklch(24% 0.020 193);
+  --surface:   oklch(19% 0.017 193);
+  --border:    oklch(32% 0.020 193);
+  --text:      oklch(96% 0.005 200);
+  --text-muted:oklch(72% 0.012 200);
+  --teal:      oklch(78% 0.13 192);
+  --teal-lt:   oklch(28% 0.045 192);
+  --teal-mid:  oklch(60% 0.10 192);
+  --on-teal:   oklch(14% 0.015 193);
+  --accent-glow: color-mix(in oklch, var(--teal) 18%, transparent);
+  color-scheme: dark;
 }
 
 html { scroll-behavior: smooth; }
@@ -47,7 +187,7 @@ html { scroll-behavior: smooth; }
   z-index: 10000;
   padding: 0.75rem 1.25rem;
   background: var(--teal);
-  color: oklch(99% 0.004 193);
+  color: var(--on-teal);
   font-family: var(--font-sans);
   font-size: 0.9rem;
   font-weight: 700;
@@ -57,7 +197,7 @@ html { scroll-behavior: smooth; }
 }
 .skip-link:focus {
   top: 0;
-  outline: 3px solid oklch(99% 0.004 193);
+  outline: 3px solid var(--on-teal);
   outline-offset: -5px;
 }
 
@@ -150,7 +290,7 @@ section { padding: 7rem 0; }
 }
 
 #nav.scrolled {
-  background: oklch(98% 0.007 193 / 0.88);
+  background: var(--nav-bg);
   box-shadow: 0 1px 0 var(--border);
 }
 
@@ -201,13 +341,13 @@ section { padding: 7rem 0; }
 
 .nav-links .nav-cta {
   background: var(--teal);
-  color: oklch(99% 0.004 193);
+  color: var(--on-teal);
   padding: 0.5rem 1.25rem;
   border-radius: 100px;
   font-weight: 600;
   transition: opacity 0.2s;
 }
-.nav-links .nav-cta:hover { opacity: 0.85; color: oklch(99% 0.004 193); }
+.nav-links .nav-cta:hover { opacity: 0.85; color: var(--on-teal); }
 
 .nav-actions {
   display: flex;
@@ -253,6 +393,34 @@ section { padding: 7rem 0; }
   margin-right: 0.25rem;
 }
 .nav-search:hover { color: var(--teal); }
+
+/* ── Theme toggle ──────────────────────────────────────────────
+   Shows the moon in light mode (meaning "switch to dark") and
+   the sun in dark mode (meaning "switch to light"). The visible
+   icon is what the button will do, not the current state — that
+   mirrors the aria-label. */
+.nav-theme {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  min-width: 44px;
+  min-height: 44px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+  position: relative;
+}
+.nav-theme:hover { color: var(--teal); }
+.nav-theme .theme-icon { display: none; }
+:root:not([data-theme="dark"]) .nav-theme .theme-icon-moon { display: block; }
+:root[data-theme="dark"] .nav-theme .theme-icon-sun { display: block; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .nav-theme .theme-icon-moon { display: none; }
+  :root:not([data-theme="light"]) .nav-theme .theme-icon-sun { display: block; }
+}
 
 #searchOverlay {
   display: none;
@@ -453,7 +621,7 @@ section { padding: 7rem 0; }
 
 .btn-primary {
   background: var(--teal);
-  color: oklch(99% 0.004 193);
+  color: var(--on-teal);
 }
 .btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
 
@@ -811,16 +979,16 @@ section { padding: 7rem 0; }
 .year-btn:hover {
   background: var(--teal);
   border-color: var(--teal);
-  color: oklch(99% 0.004 193);
+  color: var(--on-teal);
 }
 /* Active state uses non-color cues so it stays distinct under any
    color-vision deficiency (SC 1.4.1): inset ring + bolder weight. */
 .year-btn.active {
   background: var(--teal);
   border-color: var(--text);
-  color: oklch(99% 0.004 193);
+  color: var(--on-teal);
   font-weight: 800;
-  box-shadow: inset 0 0 0 2px oklch(99% 0.004 193);
+  box-shadow: inset 0 0 0 2px var(--on-teal);
 }
 
 .talks-grid {
@@ -1022,7 +1190,7 @@ footer p { font-size: 0.8rem; color: var(--text-muted); }
     flex-direction: column;
     position: fixed;
     inset: var(--nav-h) 0 0 0;
-    background: oklch(98% 0.007 193 / 0.97);
+    background: var(--nav-panel-bg);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     align-items: flex-start;
@@ -1126,7 +1294,7 @@ footer p { font-size: 0.8rem; color: var(--text-muted); }
   gap: 0.5rem;
   padding: 0.75rem 1.25rem 0.75rem 1rem;
   background: var(--teal);
-  color: oklch(99% 0.004 193);
+  color: var(--on-teal);
   border: none;
   border-radius: 9999px;
   font-family: inherit;
@@ -1317,7 +1485,7 @@ footer p { font-size: 0.8rem; color: var(--text-muted); }
 .linkedin-btn:active { transform: translateY(0); opacity: 0.85; }
 .linkedin-btn-primary {
   background: var(--teal);
-  color: oklch(99% 0.004 193);
+  color: var(--on-teal);
   box-shadow: 0 3px 14px color-mix(in oklch, var(--teal) 35%, transparent);
 }
 .linkedin-btn-secondary {
