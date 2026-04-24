@@ -522,3 +522,56 @@ document.querySelectorAll('a[target="_blank"]').forEach(a => {
   if (!text) return;
   a.setAttribute('aria-label', `${text} (opens in new tab)`);
 });
+
+// ── GA4 custom event tracking ────────────────────────────────
+function track(name, params) {
+  if (typeof gtag === 'function') gtag('event', name, params || {});
+}
+
+function cardTitle(card) {
+  return (card.querySelector('h3, h4, .talk-title, .writing-title')?.textContent
+    || card.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 120);
+}
+
+document.addEventListener('click', (e) => {
+  const card = e.target.closest('.writing-card, .talk-card');
+  if (card) {
+    track('select_content', {
+      content_type: card.classList.contains('talk-card') ? 'talk' : 'writing',
+      item_id: card.href || '',
+      item_name: cardTitle(card),
+    });
+    return;
+  }
+  const navLink = e.target.closest('.nav-links a[href^="#"]');
+  if (navLink) {
+    track('nav_click', { section: navLink.getAttribute('href').slice(1) });
+    return;
+  }
+  if (e.target.closest('#email-link')) {
+    track('contact_click', { channel: 'email' });
+    return;
+  }
+  if (e.target.closest('#linkedinFab, a[href*="linkedin.com/in/"]')) {
+    track('contact_click', { channel: 'linkedin' });
+  }
+});
+
+searchToggle?.addEventListener('click', () => track('search_open', { method: 'button' }));
+
+let searchTrackTimer = null;
+searchInput?.addEventListener('input', () => {
+  const q = searchInput.value.trim();
+  if (!q) return;
+  clearTimeout(searchTrackTimer);
+  searchTrackTimer = setTimeout(() => {
+    const w = searchResultsWriting.querySelectorAll('.writing-card').length;
+    const t = searchResultsTalks.querySelectorAll('.talk-card').length;
+    track('search', { search_term: q.toLowerCase(), result_count: w + t });
+  }, 800);
+});
+
+yearFilter?.addEventListener('click', (e) => {
+  const btn = e.target.closest('.year-btn');
+  if (btn) track('select_filter', { filter: 'talks_year', value: btn.dataset.year });
+});
