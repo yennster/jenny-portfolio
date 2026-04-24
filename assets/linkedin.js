@@ -76,6 +76,7 @@
       el.removeAttribute('inert');
       el.removeAttribute('aria-hidden');
     });
+    fab.style.animation = 'none';
     fab.classList.remove('is-hidden');
     document.body.style.overflow = '';
     setTimeout(() => overlay.classList.remove('is-closing'), 280);
@@ -109,10 +110,20 @@
     }
   });
 
+  // After fab-enter plays on page load, lock the animation inline so removing
+  // is-hidden never re-triggers it (inline styles beat class-based animation rules).
+  fab.addEventListener('animationend', (e) => {
+    if (e.animationName === 'fab-enter') fab.style.animation = 'none';
+  });
+
   setTimeout(() => {
-    if (getComputedStyle(fab).display !== 'none') {
-      fab.classList.add('fab-beat');
-      fab.addEventListener('animationend', () => fab.classList.remove('fab-beat'), { once: true });
+    // Skip if the FAB is hidden (sheet is open) — otherwise fab-beat class would
+    // linger and fire unexpectedly when the sheet closes.
+    if (getComputedStyle(fab).display !== 'none' && !fab.classList.contains('is-hidden')) {
+      fab.style.animation = 'fab-beat 0.48s cubic-bezier(0.25, 1, 0.5, 1)';
+      fab.addEventListener('animationend', (e) => {
+        if (e.animationName === 'fab-beat') fab.style.animation = 'none';
+      }, { once: true });
     }
   }, 1400);
   overlay.addEventListener('click', (e) => { if (e.target === overlay) closeSheet(); });
