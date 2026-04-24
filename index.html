@@ -27,7 +27,43 @@
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#0d6b63" />
+  <link rel="canonical" href="https://jennyplunkett.me/" />
   <link rel="stylesheet" href="style.css" />
+
+  <!-- Structured data: ProfilePage + Person -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    "mainEntity": {
+      "@type": "Person",
+      "name": "Jenny Speelman",
+      "alternateName": "Jenny Plunkett",
+      "jobTitle": "Staff Engineer, Developer Relations",
+      "description": "Staff Engineer in Developer Relations specializing in Edge AI, TinyML, and embedded machine learning. Co-author of AI at the Edge (O'Reilly).",
+      "url": "https://jennyplunkett.me/",
+      "image": "https://jennyplunkett.me/images/jenny-680.jpg",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Amsterdam",
+        "addressCountry": "NL"
+      },
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "The University of Texas at Austin"
+      },
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Edge Impulse / Qualcomm"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/in/jennyplunkett",
+        "https://github.com/yennster",
+        "https://www.oreilly.com/library/view/ai-at-the/9781098120191/"
+      ]
+    }
+  }
+  </script>
 </head>
 <body>
 
@@ -112,7 +148,11 @@
       </div>
       <div class="hero-photo">
         <div class="photo-ring">
-          <img src="images/jenny.jpg" alt="Jenny Speelman" />
+          <picture>
+            <source type="image/webp" srcset="images/jenny-340.webp 1x, images/jenny-680.webp 2x" />
+            <source type="image/jpeg" srcset="images/jenny-340.jpg 1x, images/jenny-680.jpg 2x" />
+            <img src="images/jenny-340.jpg" alt="Jenny Speelman" width="340" height="340" fetchpriority="high" decoding="async" />
+          </picture>
         </div>
         <div class="photo-blob"></div>
       </div>
@@ -232,7 +272,11 @@
           <a href="https://www.oreilly.com/library/view/ai-at-the/9781098120191/" target="_blank" rel="noopener" class="btn btn-primary">Read on O'Reilly →</a>
         </div>
         <div class="book-cover-img">
-          <img src="images/book-cover.jpg" alt="Book cover of AI at the Edge: Solving Real World Problems with Embedded Machine Learning, by Daniel Situnayake and Jenny Plunkett, published by O'Reilly Media." />
+          <picture>
+            <source type="image/webp" srcset="images/book-cover-220.webp 1x, images/book-cover-440.webp 2x" />
+            <source type="image/jpeg" srcset="images/book-cover-220.jpg 1x, images/book-cover-440.jpg 2x" />
+            <img src="images/book-cover-220.jpg" alt="Book cover of AI at the Edge: Solving Real World Problems with Embedded Machine Learning, by Daniel Situnayake and Jenny Plunkett, published by O'Reilly Media." width="220" height="289" loading="lazy" decoding="async" />
+          </picture>
         </div>
       </div>
     </div>
@@ -915,174 +959,7 @@
     </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" crossorigin="anonymous"></script>
-  <script src="script.js"></script>
-  <script>
-    (function () {
-      const LINKEDIN_URL = 'https://www.linkedin.com/in/jennyplunkett';
-      const fab = document.getElementById('linkedinFab');
-      const overlay = document.getElementById('linkedinOverlay');
-      const sheet = document.getElementById('linkedinSheet');
-      const closeBtn = document.getElementById('linkedinClose');
-      const shareBtn = document.getElementById('linkedinShare');
-      const openLinkedInLink = overlay.querySelector('.linkedin-btn-primary');
-      let qrGenerated = false;
-      let sheetOpen = false;
-      let previousFocus = null;
-
-      function getFocusables() {
-        return [closeBtn, openLinkedInLink, shareBtn].filter(el => {
-          if (!el) return false;
-          if (el.disabled) return false;
-          const style = window.getComputedStyle(el);
-          return style.display !== 'none' && style.visibility !== 'hidden';
-        });
-      }
-
-      function openSheet() {
-        if (!qrGenerated) {
-          new QRCode(document.getElementById('linkedinQR'), {
-            text: LINKEDIN_URL,
-            width: 200,
-            height: 200,
-            colorDark: 'oklch(48% 0.13 192)',
-            colorLight: '#ffffff',
-            correctLevel: QRCode.CorrectLevel.H
-          });
-          qrGenerated = true;
-        }
-        previousFocus = document.activeElement;
-        overlay.classList.remove('is-closing');
-        overlay.classList.add('is-open');
-        overlay.removeAttribute('aria-hidden');
-        // Inert + aria-hidden background landmarks while sheet is open.
-        document.querySelectorAll('#nav, #main, footer').forEach(el => {
-          el.setAttribute('inert', '');
-          el.setAttribute('aria-hidden', 'true');
-        });
-        fab.classList.add('is-hidden');
-        document.body.style.overflow = 'hidden';
-        sheetOpen = true;
-        // Move focus into the dialog
-        requestAnimationFrame(() => {
-          try { closeBtn.focus(); } catch (_) {}
-        });
-      }
-
-      function closeSheet() {
-        overlay.classList.remove('is-open');
-        overlay.classList.add('is-closing');
-        overlay.setAttribute('aria-hidden', 'true');
-        document.querySelectorAll('#nav, #main, footer').forEach(el => {
-          el.removeAttribute('inert');
-          el.removeAttribute('aria-hidden');
-        });
-        fab.classList.remove('is-hidden');
-        document.body.style.overflow = '';
-        setTimeout(() => overlay.classList.remove('is-closing'), 280);
-        sheetOpen = false;
-        // Return focus: prefer the element that opened the sheet, fall back to the FAB
-        const target = (previousFocus && typeof previousFocus.focus === 'function'
-          && document.body.contains(previousFocus)
-          && window.getComputedStyle(previousFocus).display !== 'none')
-          ? previousFocus
-          : fab;
-        try { target.focus(); } catch (_) {}
-        previousFocus = null;
-      }
-
-      fab.addEventListener('click', openSheet);
-      closeBtn.addEventListener('click', closeSheet);
-
-      // Focus trap: cycle Tab / Shift+Tab between close, open LinkedIn, and share
-      overlay.addEventListener('keydown', (e) => {
-        if (!sheetOpen || e.key !== 'Tab') return;
-        const focusables = getFocusables();
-        if (!focusables.length) return;
-        const first = focusables[0];
-        const last = focusables[focusables.length - 1];
-        const active = document.activeElement;
-        if (e.shiftKey && (active === first || !overlay.contains(active))) {
-          e.preventDefault();
-          last.focus();
-        } else if (!e.shiftKey && (active === last || !overlay.contains(active))) {
-          e.preventDefault();
-          first.focus();
-        }
-      });
-
-      // Single attention beat after entrance animation completes
-      setTimeout(() => {
-        if (getComputedStyle(fab).display !== 'none') {
-          fab.classList.add('fab-beat');
-          fab.addEventListener('animationend', () => fab.classList.remove('fab-beat'), { once: true });
-        }
-      }, 1400);
-      overlay.addEventListener('click', (e) => { if (e.target === overlay) closeSheet(); });
-
-      const SHARE_ICON = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>';
-
-      async function copyFallback() {
-        try {
-          await navigator.clipboard.writeText(LINKEDIN_URL);
-          shareBtn.textContent = 'Copied!';
-          setTimeout(() => { shareBtn.innerHTML = SHARE_ICON + ' Share'; }, 2000);
-        } catch (_) {}
-      }
-
-      shareBtn.addEventListener('click', async () => {
-        if (navigator.share) {
-          try {
-            await navigator.share({ title: 'Jenny Speelman on LinkedIn', url: LINKEDIN_URL });
-          } catch (e) {
-            if (e.name !== 'AbortError') await copyFallback();
-          }
-        } else {
-          await copyFallback();
-        }
-      });
-
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && sheetOpen) {
-          e.preventDefault();
-          closeSheet();
-        }
-      });
-
-      // Swipe-down to dismiss
-      let dragStart = null;
-      let dragStartTime = 0;
-      let dragging = false;
-
-      sheet.addEventListener('touchstart', (e) => {
-        dragStart = e.touches[0].clientY;
-        dragStartTime = e.timeStamp || Date.now();
-        dragging = true;
-        sheet.style.transition = 'none';
-      }, { passive: true });
-
-      sheet.addEventListener('touchmove', (e) => {
-        if (!dragging) return;
-        const dy = Math.max(0, e.touches[0].clientY - dragStart);
-        sheet.style.transform = `translateY(${dy}px)`;
-      }, { passive: true });
-
-      sheet.addEventListener('touchend', (e) => {
-        if (!dragging) return;
-        dragging = false;
-        sheet.style.transition = '';
-        const dy = e.changedTouches[0].clientY - dragStart;
-        const endTime = e.timeStamp || Date.now();
-        const elapsed = Math.max(1, endTime - dragStartTime);
-        const velocity = dy / elapsed;
-        if (dy > 80 || velocity > 0.5) {
-          closeSheet();
-          sheet.style.transform = '';
-        } else {
-          sheet.style.transform = '';
-        }
-      }, { passive: true });
-    })();
-  </script>
+  <script src="script.js" defer></script>
+  <script src="linkedin.js" defer></script>
 </body>
 </html>
