@@ -45,9 +45,6 @@ function closeNav({ returnFocus = false } = {}) {
 burger.addEventListener('click', () => {
   const opening = !navLinks.classList.contains('open');
   opening ? openNav() : closeNav();
-  if (typeof plausible === 'function') {
-    plausible('Mobile Menu', { props: { action: opening ? 'open' : 'close' } });
-  }
 });
 navLinks.querySelectorAll('a').forEach(a => {
   a.addEventListener('click', () => closeNav());
@@ -101,7 +98,6 @@ document.addEventListener('keydown', (e) => {
       try { localStorage.setItem('theme', next); } catch (_) {}
     }
     syncButton();
-    if (typeof plausible === 'function') plausible('Theme Toggle', { props: { theme: next } });
   });
 
   // Follow OS changes when the user hasn't pinned a choice.
@@ -601,19 +597,6 @@ document.addEventListener('click', (e) => {
     });
     return;
   }
-  const navLink = e.target.closest('.nav-links a[href^="#"]');
-  if (navLink) {
-    track('Nav Click', { section: navLink.getAttribute('href').slice(1) });
-    return;
-  }
-  const heroCta = e.target.closest('.hero-ctas a[href^="#"]');
-  if (heroCta) {
-    track('Hero CTA', {
-      cta: heroCta.textContent.trim(),
-      target: heroCta.getAttribute('href').slice(1),
-    });
-    return;
-  }
   if (e.target.closest('#email-link')) {
     track('Contact Click', { channel: 'email' });
     return;
@@ -622,8 +605,6 @@ document.addEventListener('click', (e) => {
     track('Contact Click', { channel: 'linkedin' });
   }
 });
-
-searchToggle?.addEventListener('click', () => track('Search Open', { method: 'button' }));
 
 let searchTrackTimer = null;
 searchInput?.addEventListener('input', () => {
@@ -637,7 +618,3 @@ searchInput?.addEventListener('input', () => {
   }, 800);
 });
 
-yearFilter?.addEventListener('click', (e) => {
-  const btn = e.target.closest('.year-btn');
-  if (btn) track('Filter', { filter: 'talks_year', value: btn.dataset.year });
-});
