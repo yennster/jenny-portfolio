@@ -863,8 +863,19 @@ section { padding: 7rem 0; }
   flex-shrink: 0;
 }
 
+.book-cover-link {
+  display: inline-block;
+  border-radius: 6px;
+}
+
+.book-cover-link:focus-visible {
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
 .book-cover-img img {
   width: 200px;
+  height: auto;
   border-radius: 6px;
   box-shadow: -6px 6px 24px oklch(0% 0 0 / 0.18), 0 2px 8px oklch(0% 0 0 / 0.10);
   display: block;
