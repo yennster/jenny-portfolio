@@ -20,58 +20,138 @@
   <meta name="twitter:description" content="Edge AI, embedded ML, and the future of intelligent hardware. Co-author of AI at the Edge (O'Reilly)." />
   <meta name="twitter:image" content="https://jennyplunkett.me/og-image.png" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Bricolage+Grotesque:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- Fonts are self-hosted under /fonts (see @font-face in assets/style.css).
+       Preload the two most-used files to paint the hero with zero FOIT. -->
+  <link rel="preload" as="font" type="font/woff2" href="fonts/bricolage-grotesque-vf-latin.woff2" crossorigin />
+  <link rel="preload" as="font" type="font/woff2" href="fonts/atkinson-hyperlegible-400-normal-latin.woff2" crossorigin />
+  <!-- Plausible fires the pageview early; preconnect shaves ~100ms. -->
+  <link rel="preconnect" href="https://plausible.io" crossorigin />
+  <!-- Preload the LCP image (hero photo). Browser picks the 1x/2x source per DPR. -->
+  <link rel="preload" as="image" href="images/jenny-340.webp" type="image/webp" imagesrcset="images/jenny-340.webp 1x, images/jenny-680.webp 2x" fetchpriority="high" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
   <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#0d6b63" />
+  <meta name="theme-color" content="#0d6b63" id="themeColorMeta" />
   <link rel="canonical" href="https://jennyplunkett.me/" />
-  <link rel="stylesheet" href="style.css" />
+  <!-- IndieWeb: rel="me" for identity verification across federated social -->
+  <link rel="me" href="https://mastodon.world/@jennyp" />
+  <link rel="me" href="https://github.com/yennster" />
+  <link rel="me" href="https://www.linkedin.com/in/jennyplunkett" />
 
-  <!-- Structured data: ProfilePage + Person -->
+  <!-- Theme init: apply stored preference before CSS paints to avoid a flash.
+       Kept inline and synchronous by design. -->
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem('theme');
+        if (stored === 'light' || stored === 'dark') {
+          document.documentElement.setAttribute('data-theme', stored);
+        }
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var active = stored || (prefersDark ? 'dark' : 'light');
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', active === 'dark' ? '#0b2725' : '#0d6b63');
+      } catch (_) { /* localStorage may be disabled — fall back to CSS media query */ }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="assets/style.css" />
+
+  <!-- Structured data: ProfilePage + Person + Book + ScholarlyArticle -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "ProfilePage",
-    "mainEntity": {
-      "@type": "Person",
-      "name": "Jenny Speelman",
-      "alternateName": "Jenny Plunkett",
-      "jobTitle": "Staff Engineer, Developer Relations",
-      "description": "Staff Engineer in Developer Relations specializing in Edge AI, TinyML, and embedded machine learning. Co-author of AI at the Edge (O'Reilly).",
-      "url": "https://jennyplunkett.me/",
-      "image": "https://jennyplunkett.me/images/jenny-680.jpg",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Amsterdam",
-        "addressCountry": "NL"
+    "@graph": [
+      {
+        "@type": "ProfilePage",
+        "@id": "https://jennyplunkett.me/#profile",
+        "mainEntity": { "@id": "https://jennyplunkett.me/#person" }
       },
-      "alumniOf": {
-        "@type": "CollegeOrUniversity",
-        "name": "The University of Texas at Austin"
+      {
+        "@type": "Person",
+        "@id": "https://jennyplunkett.me/#person",
+        "name": "Jenny Speelman",
+        "alternateName": "Jenny Plunkett",
+        "jobTitle": "Staff Engineer, Developer Relations",
+        "description": "Staff Engineer in Developer Relations specializing in Edge AI, TinyML, and embedded machine learning. Co-author of AI at the Edge (O'Reilly).",
+        "url": "https://jennyplunkett.me/",
+        "image": "https://jennyplunkett.me/images/jenny-680.jpg",
+        "knowsAbout": [
+          "Edge AI",
+          "TinyML",
+          "Embedded Machine Learning",
+          "Developer Relations",
+          "Technical Writing",
+          "IoT"
+        ],
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Amsterdam",
+          "addressCountry": "NL"
+        },
+        "alumniOf": {
+          "@type": "CollegeOrUniversity",
+          "name": "The University of Texas at Austin"
+        },
+        "worksFor": {
+          "@type": "Organization",
+          "name": "Edge Impulse / Qualcomm"
+        },
+        "sameAs": [
+          "https://www.linkedin.com/in/jennyplunkett",
+          "https://github.com/yennster",
+          "https://mastodon.world/@jennyp",
+          "https://www.oreilly.com/library/view/ai-at-the/9781098120191/"
+        ]
       },
-      "worksFor": {
-        "@type": "Organization",
-        "name": "Edge Impulse / Qualcomm"
+      {
+        "@type": "Book",
+        "@id": "https://jennyplunkett.me/#book-ai-at-the-edge",
+        "name": "AI at the Edge",
+        "alternateName": "AI at the Edge: Solving Real World Problems with Embedded Machine Learning",
+        "bookFormat": "https://schema.org/Paperback",
+        "isbn": "9781098120191",
+        "inLanguage": "en",
+        "datePublished": "2023-01-10",
+        "url": "https://www.oreilly.com/library/view/ai-at-the/9781098120191/",
+        "image": "https://jennyplunkett.me/images/book-cover-440.jpg",
+        "author": [
+          { "@type": "Person", "name": "Daniel Situnayake" },
+          { "@id": "https://jennyplunkett.me/#person" }
+        ],
+        "publisher": {
+          "@type": "Organization",
+          "name": "O'Reilly Media"
+        },
+        "about": [
+          "Edge AI",
+          "TinyML",
+          "Embedded Machine Learning",
+          "Microcontrollers"
+        ]
       },
-      "sameAs": [
-        "https://www.linkedin.com/in/jennyplunkett",
-        "https://github.com/yennster",
-        "https://www.oreilly.com/library/view/ai-at-the/9781098120191/"
-      ]
-    }
+      {
+        "@type": "ScholarlyArticle",
+        "@id": "https://arxiv.org/abs/2212.03332",
+        "name": "Edge Impulse: An MLOps Platform for Tiny Machine Learning",
+        "headline": "Edge Impulse: An MLOps Platform for Tiny Machine Learning",
+        "datePublished": "2022-12-06",
+        "url": "https://arxiv.org/abs/2212.03332",
+        "publisher": {
+          "@type": "Organization",
+          "name": "arXiv, Cornell University"
+        },
+        "author": { "@id": "https://jennyplunkett.me/#person" }
+      }
+    ]
   }
   </script>
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LW7G7MWCKE"></script>
+  <!-- Privacy-friendly analytics by Plausible — cookieless, no banner required. -->
+  <script async src="https://plausible.io/js/pa--HY2cpyqkKJuL5luJgoFc.js"></script>
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-LW7G7MWCKE');
+    window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+    plausible.init()
   </script>
 </head>
 <body>
@@ -82,7 +162,7 @@
   <!-- NAV -->
   <nav id="nav">
     <div class="nav-inner">
-      <a href="#hero" class="nav-logo" aria-label="Home — Jenny Speelman">JS</a>
+      <a href="#hero" class="nav-logo" aria-label="JS, home — Jenny Speelman">JS</a>
       <ul class="nav-links" id="navLinks">
         <li><a href="#about">About</a></li>
         <li><a href="#experience">Experience</a></li>
@@ -91,6 +171,10 @@
         <li><a href="#contact" class="nav-cta">Contact</a></li>
       </ul>
       <div class="nav-actions">
+        <button class="nav-theme" id="themeToggle" type="button" aria-label="Switch to dark mode" aria-pressed="false">
+          <svg class="theme-icon theme-icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+          <svg class="theme-icon theme-icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
         <button class="nav-search" id="searchToggle" aria-label="Search (slash or Command K)">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         </button>
@@ -284,7 +368,7 @@
           <picture>
             <source type="image/webp" srcset="images/book-cover-220.webp 1x, images/book-cover-440.webp 2x" />
             <source type="image/jpeg" srcset="images/book-cover-220.jpg 1x, images/book-cover-440.jpg 2x" />
-            <img src="images/book-cover-220.jpg" alt="Book cover of AI at the Edge: Solving Real World Problems with Embedded Machine Learning, by Daniel Situnayake and Jenny Plunkett, published by O'Reilly Media." width="220" height="289" loading="lazy" decoding="async" />
+            <img src="images/book-cover-220.jpg" alt="Book cover of AI at the Edge: Solving Real World Problems with Embedded Machine Learning, by Daniel Situnayake and Jenny Plunkett, published by O'Reilly Media." width="167" height="220" loading="lazy" decoding="async" />
           </picture>
         </div>
       </div>
@@ -912,15 +996,19 @@
         <div class="section-label">Contact</div>
         <h2 id="contactTitle">Let's <span class="accent">connect</span></h2>
         <div class="contact-links">
-          <a class="contact-link" id="email-link" href="mailto:hello&#64;jennyplunkett&#46;me" aria-label="Email Jenny">
+          <a class="contact-link" id="email-link" href="mailto:hello&#64;jennyplunkett&#46;me">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
             <span id="email-label">hello&#64;jennyplunkett&#46;me</span>
           </a>
-          <a href="https://github.com/yennster" target="_blank" rel="noopener" class="contact-link">
+          <a href="https://github.com/yennster" target="_blank" rel="noopener me" class="contact-link">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
             github.com/yennster
           </a>
-          <a href="https://www.linkedin.com/in/jennyplunkett" target="_blank" rel="noopener" class="contact-link">
+          <a href="https://mastodon.world/@jennyp" target="_blank" rel="noopener me" class="contact-link">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.58 13.913c-.29 1.469-2.592 3.121-5.238 3.396-1.379.163-2.737.313-4.185.249-2.368-.108-4.237-.571-4.237-.571 0 .232.014.453.043.661.307 2.33 2.294 2.469 4.176 2.533 1.9.065 3.592-.469 3.592-.469l.078 1.726s-1.329.715-3.695.847c-1.305.072-2.925-.033-4.812-.533-4.092-1.084-4.796-5.448-4.903-9.875-.033-1.316-.013-2.557-.013-3.595 0-4.525 2.962-5.849 2.962-5.849 1.495-.687 4.058-.975 6.722-.997h.066c2.664.022 5.229.31 6.723.997 0 0 2.962 1.324 2.962 5.849 0 0 .037 3.339-.414 5.665zm-3.048-5.318v5.487h-2.176v-5.326c0-1.122-.472-1.692-1.417-1.692-1.044 0-1.567.676-1.567 2.012v2.914h-2.164V9.076c0-1.336-.524-2.012-1.568-2.012-.945 0-1.417.57-1.417 1.692v5.326H6.047V8.595c0-1.121.286-2.012.859-2.67.591-.658 1.366-.996 2.327-.996 1.113 0 1.955.428 2.512 1.284l.542.906.542-.906c.557-.856 1.399-1.284 2.512-1.284.961 0 1.736.338 2.327.996.573.659.859 1.549.859 2.67z"/></svg>
+            mastodon.world/@jennyp
+          </a>
+          <a href="https://www.linkedin.com/in/jennyplunkett" target="_blank" rel="noopener me" class="contact-link">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
             LinkedIn
           </a>
@@ -974,7 +1062,7 @@
     </div>
   </div>
 
-  <script src="script.js" defer></script>
-  <script src="linkedin.js" defer></script>
+  <script src="assets/script.js" defer></script>
+  <script src="assets/linkedin.js" defer></script>
 </body>
 </html>

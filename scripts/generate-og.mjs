@@ -13,6 +13,6 @@ await page.goto(file, { waitUntil: 'networkidle0' });
 await new Promise(r => setTimeout(r, 500)); // let fonts settle
 
 const buf = await page.screenshot({ type: 'png', clip: { x: 0, y: 0, width: 1200, height: 630 } });
-writeFileSync(join(__dirname, 'og-image.png'), buf);
+writeFileSync(join(__dirname, '..', 'og-image.png'), buf);
 await browser.close();
 console.log('Saved og-image.png (2400x1260 @2x)');
