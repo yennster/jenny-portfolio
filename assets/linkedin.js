@@ -37,6 +37,8 @@
   }
 
   async function openSheet() {
+    if (sheetOpen) return;
+    sheetOpen = true;
     if (!qrGenerated) {
       try {
         await loadQRLibrary();
@@ -61,7 +63,6 @@
     });
     fab.classList.add('is-hidden');
     document.body.style.overflow = 'hidden';
-    sheetOpen = true;
     requestAnimationFrame(() => {
       try { closeBtn.focus(); } catch (_) {}
     });
