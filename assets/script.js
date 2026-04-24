@@ -43,7 +43,11 @@ function closeNav({ returnFocus = false } = {}) {
 }
 
 burger.addEventListener('click', () => {
-  navLinks.classList.contains('open') ? closeNav() : openNav();
+  const opening = !navLinks.classList.contains('open');
+  opening ? openNav() : closeNav();
+  if (typeof plausible === 'function') {
+    plausible('Mobile Menu', { props: { action: opening ? 'open' : 'close' } });
+  }
 });
 navLinks.querySelectorAll('a').forEach(a => {
   a.addEventListener('click', () => closeNav());
@@ -600,6 +604,14 @@ document.addEventListener('click', (e) => {
   const navLink = e.target.closest('.nav-links a[href^="#"]');
   if (navLink) {
     track('Nav Click', { section: navLink.getAttribute('href').slice(1) });
+    return;
+  }
+  const heroCta = e.target.closest('.hero-ctas a[href^="#"]');
+  if (heroCta) {
+    track('Hero CTA', {
+      cta: heroCta.textContent.trim(),
+      target: heroCta.getAttribute('href').slice(1),
+    });
     return;
   }
   if (e.target.closest('#email-link')) {
