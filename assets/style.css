@@ -658,7 +658,17 @@ section { padding: 7rem 0; }
   height: 100%;
   object-fit: cover;
   object-position: center top;
+  filter: grayscale(1) sepia(0.4) hue-rotate(157deg) saturate(0.5);
   transition: filter 0.4s;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .photo-ring img {
+    filter: grayscale(1) sepia(0.35) hue-rotate(157deg) saturate(0.4) brightness(0.8);
+  }
+}
+:root[data-theme="dark"] .photo-ring img {
+  filter: grayscale(1) sepia(0.35) hue-rotate(157deg) saturate(0.4) brightness(0.8);
 }
 
 .photo-blob {
