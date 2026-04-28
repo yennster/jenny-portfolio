@@ -151,9 +151,10 @@ Bachelor of Science (B.S.), Electrical & Computer Engineering · 2013 – 2018
 - **July 2024** — Edge Impulse: [Impulse Experiments: Revolutionize Your AI Project Workflow](https://youtu.be/3NvLb7faOOs)
 - **September 2024** — The Things Conference 2024: [Generative AI and IoT, is there a match? - The Things Podcast](https://www.youtube.com/watch?v=TTi6ITX8T9Q)
 - **October 2024** — Edge Impulse: [The Ultimate Guide to Edge AI](https://www.linkedin.com/posts/edgeimpulse_edgeai-ml-ai-activity-7289758955994562561-kEAS?utm_source=share&utm_medium=member_desktop)
-- **November 2024** — Edge AI Foundation: [EDGE AI TALKS! MLSysBook.Al: Essentials of Engineering ML Systems with Vijay Janapa Reddi](https://www.youtube.com/watch?v=38EdyhPy7io)
+- **November 2024** — Edge AI Foundation: [EDGE AI TALKS! MLSysBook.AI: Essentials of Engineering ML Systems with Vijay Janapa Reddi](https://www.youtube.com/watch?v=38EdyhPy7io)
 - **January 2025** — Edge Impulse: [See It, Hear It, Sense It — 360° Anomaly Detection Webinar for Real-world Industrial Applications](https://edgeimpulse.com/all-events/see-it-hear-it-sense-it----360deg-anomaly-detection-webinar-for-real-world-industrial-applications)
 - **February 2025** — Edge AI Foundation: [EDGE AI TALKS: AI born at the edge, built on NXP](https://www.youtube.com/watch?v=Bn9XgBYjnLg&ab_channel=EDGEAIFOUNDATION)
+- **November 2025** — Edge AI Foundation Taipei 2025: [Edge AI Tooling & Development Frameworks: MLOps for Edge AI](https://www.edgeaifoundation.org/events/30688)
 
 ---
 
